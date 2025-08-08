@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Comprei Barato</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FF6B35;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #FF6B35;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #FF6B35;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E8F5E8;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #757575, #616161);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(117, 117, 117, 0.4);
+        }
+
+        .products-list {
+            margin-top: 30px;
+        }
+
+        .product-item {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .product-item h3 {
+            color: #2E7D32;
+            margin-bottom: 10px;
+        }
+
+        .product-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .product-info span {
+            background: #E8F5E8;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #2E7D32;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .success-message {
+            background: #E8F5E8;
+            color: #2E7D32;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Emoji Picker Styles */
+        .emoji-picker {
+            position: relative;
+            display: inline-block;
+        }
+
+        .emoji-trigger {
+            background: #E8F5E8;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .emoji-trigger:hover {
+            background: #C8E6C9;
+        }
+
+        .emoji-panel {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 2px solid #4CAF50;
+            border-radius: 15px;
+            padding: 15px;
+            max-width: 400px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .emoji-category {
+            margin-bottom: 15px;
+        }
+
+        .emoji-category h4 {
+            color: #2E7D32;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5px;
+        }
+
+        .emoji-item {
+            font-size: 1.5rem;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .emoji-item:hover {
+            background: #E8F5E8;
+            transform: scale(1.1);
+        }
+
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #E8F5E8;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-top: 10px;
+        }
+
+        .image-preview.error {
+            border-color: #f44336;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+
+            .product-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .emoji-panel {
+                max-width: 300px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .emoji-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">💰 Admin Comprei Barato</div>
+            <div class="subtitle">Painel de Administração - Vinicius</div>
+            <button class="logout-btn" onclick="logout()">Sair</button>
+        </div>
+
+        <div class="admin-panel">
+            <h2 class="section-title">Adicionar Novo Produto</h2>
+            
+            <div id="message"></div>
+
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="productName">Nome do Produto:</label>
+                    <input type="text" id="productName" name="productName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="productCategory">Categoria:</label>
+                    <select id="productCategory" name="productCategory" required>
+                        <option value="">Selecione uma categoria</option>
+                        <option value="pets">Pets</option>
+                        <option value="fones">Fones</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="gamer">Gamer</option>
+                        <option value="utensilios">Utensílios</option>
+                        <option value="roupas">Roupas</option>
+                        <option value="cabos">Cabos</option>
+                        <option value="ferramentas">Ferramentas</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="productPrice">Preço (R$):</label>
+                    <input type="number" id="productPrice" name="productPrice" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="productLink">Link do Shopee:</label>
+                    <input type="url" id="productLink" name="productLink" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Ícone (emoji):</label>
+                    <div class="emoji-picker">
+                        <div class="emoji-trigger" onclick="toggleEmojiPanel()">
+                            <span id="selectedEmoji">📱</span>
+                        </div>
+                        <div class="emoji-panel" id="emojiPanel">
+                            <div class="emoji-category">
+                                <h4>Pets</h4>
+                                <div class="emoji-grid">
+                                    <div class="emoji-item" onclick="selectEmoji('🐾')">🐾</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🐕')">🐕</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🐱')">🐱</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🐦')">🐦</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🐠')">🐠</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🦜')">🦜</div>
+                                </div>
+                            </div>
+
+                            <div class="emoji-category">
+                                <h4>Fones</h4>
+                                <div class="emoji-grid">
+                                    <div class="emoji-item" onclick="selectEmoji('🎧')">🎧</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎵')">🎵</div>
+                                    <div class="emoji-item" onclick="selectEmoji('📱')">📱</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🔊')">🔊</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎤')">🎤</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎼')">🎼</div>
+                                </div>
+                            </div>
+
+                            <div class="emoji-category">
+                                <h4>Eletrônicos</h4>
+                                <div class="emoji-grid">
+                                    <div class="emoji-item" onclick="selectEmoji('📱')">📱</div>
+                                    <div class="emoji-item" onclick="selectEmoji('💻')">💻</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🖥️')">🖥️</div>
+                                    <div class="emoji-item" onclick="selectEmoji('📺')">📺</div>
+                                    <div class="emoji-item" onclick="selectEmoji('📷')">📷</div>
+                                    <div class="emoji-item" onclick="selectEmoji('⌚')">⌚</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🔋')">🔋</div>
+                                    <div class="emoji-item" onclick="selectEmoji('💾')">💾</div>
+                                </div>
+                            </div>
+
+                            <div class="emoji-category">
+                                <h4>Gamer</h4>
+                                <div class="emoji-grid">
+                                    <div class="emoji-item" onclick="selectEmoji('🎮')">🎮</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🕹️')">🕹️</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎯')">🎯</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🏆')">🏆</div>
+                                    <div class="emoji-item" onclick="selectEmoji('⚡')">⚡</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎲')">🎲</div>
+                                </div>
+                            </div>
+
+                            <div class="emoji-category">
+                                <h4>Utensílios</h4>
+                                <div class="emoji-grid">
+                                    <div class="emoji-item" onclick="selectEmoji('🍴')">🍴</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🍳')">🍳</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🥄')">🥄</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🔪')">🔪</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🥣')">🥣</div>
+                                    <div class="emoji-item" onclick="selectEmoji('☕')">☕</div>
+                                </div>
+                            </div>
+
+                            <div class="emoji-category">
+                                <h4>Roupas</h4>
+                                <div class="emoji-grid">
+                                    <div class="emoji-item" onclick="selectEmoji('👕')">👕</div>
+                                    <div class="emoji-item" onclick="selectEmoji('👖')">👖</div>
+                                    <div class="emoji-item" onclick="selectEmoji('👗')">👗</div>
+                                    <div class="emoji-item" onclick="selectEmoji('👟')">👟</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🧥')">🧥</div>
+                                    <div class="emoji-item" onclick="selectEmoji('👔')">👔</div>
+                                    <div class="emoji-item" onclick="selectEmoji('👜')">👜</div>
+                                    <div class="emoji-item" onclick="selectEmoji('👠')">👠</div>
+                                </div>
+                            </div>
+
+                            <div class="emoji-category">
+                                <h4>Cabos</h4>
+                                <div class="emoji-grid">
+                                    <div class="emoji-item" onclick="selectEmoji('🔌')">🔌</div>
+                                    <div class="emoji-item" onclick="selectEmoji('⚡')">⚡</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🔋')">🔋</div>
+                                    <div class="emoji-item" onclick="selectEmoji('📱')">📱</div>
+                                    <div class="emoji-item" onclick="selectEmoji('💻')">💻</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🖥️')">🖥️</div>
+                                </div>
+                            </div>
+
+                            <div class="emoji-category">
+                                <h4>Ferramentas</h4>
+                                <div class="emoji-grid">
+                                    <div class="emoji-item" onclick="selectEmoji('🔧')">🔧</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🔨')">🔨</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🪛')">🪛</div>
+                                    <div class="emoji-item" onclick="selectEmoji('⚒️')">⚒️</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🔩')">🔩</div>
+                                    <div class="emoji-item" onclick="selectEmoji('⚙️')">⚙️</div>
+                                </div>
+                            </div>
+                                    <div class="emoji-item" onclick="selectEmoji('🏋️')">🏋️</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎯')">🎯</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🏓')">🏓</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🏸')">🏸</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎽')">🎽</div>
+                                </div>
+                            </div>
+
+                            <div class="emoji-category">
+                                <h4>Livros & Hobbies</h4>
+                                <div class="emoji-grid">
+                                    <div class="emoji-item" onclick="selectEmoji('📚')">📚</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎨')">🎨</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🧸')">🧸</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎮')">🎮</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎵')">🎵</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎬')">🎬</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🧩')">🧩</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎲')">🎲</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎭')">🎭</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎪')">🎪</div>
+                                    <div class="emoji-item" onclick="selectEmoji('🎨')">🎨</div>
+                                    <div class="emoji-item" onclick="selectEmoji('📝')">📝</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="productImage" name="productImage" value="📱" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="productImageUrl">Link da Imagem (opcional):</label>
+                    <input type="url" id="productImageUrl" name="productImageUrl" placeholder="https://exemplo.com/imagem.jpg">
+                    <img id="imagePreview" class="image-preview" style="display: none;">
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescription">Descrição (opcional):</label>
+                    <textarea id="productDescription" name="productDescription" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn">Adicionar Produto</button>
+                <button type="button" class="btn btn-secondary" onclick="clearForm()">Limpar Formulário</button>
+            </form>
+
+            <div class="products-list">
+                <h2 class="section-title">Produtos Cadastrados</h2>
+                <div id="productsList">
+                    <!-- Produtos serão carregados aqui -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se o usuário está logado
+        if (!sessionStorage.getItem('admin_logged_in')) {
+            window.location.href = 'login.html';
+        }
+
+        // Armazenamento local dos produtos
+        let products = JSON.parse(localStorage.getItem('collshop_products')) || [];
+
+        // Carregar produtos existentes
+        loadProducts();
+
+        // Função para alternar painel de emojis
+        function toggleEmojiPanel() {
+            const panel = document.getElementById('emojiPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Função para selecionar emoji
+        function selectEmoji(emoji) {
+            document.getElementById('selectedEmoji').textContent = emoji;
+            document.getElementById('productImage').value = emoji;
+            document.getElementById('emojiPanel').style.display = 'none';
+        }
+
+        // Fechar painel de emojis ao clicar fora
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('emojiPanel');
+            const trigger = document.querySelector('.emoji-trigger');
+            if (!panel.contains(e.target) && !trigger.contains(e.target)) {
+                panel.style.display = 'none';
+            }
+        });
+
+        // Preview da imagem
+        document.getElementById('productImageUrl').addEventListener('input', function() {
+            const url = this.value;
+            const preview = document.getElementById('imagePreview');
+            
+            if (url) {
+                preview.src = url;
+                preview.style.display = 'block';
+                preview.onerror = function() {
+                    preview.classList.add('error');
+                };
+                preview.onload = function() {
+                    preview.classList.remove('error');
+                };
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // Função para adicionar produto
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const product = {
+                id: Date.now(),
+                name: formData.get('productName'),
+                category: formData.get('productCategory'),
+                price: parseFloat(formData.get('productPrice')),
+                link: formData.get('productLink'),
+                image: formData.get('productImage'),
+                imageUrl: formData.get('productImageUrl') || null,
+                description: formData.get('productDescription')
+            };
+
+            products.push(product);
+            localStorage.setItem('collshop_products', JSON.stringify(products));
+            
+            showMessage('Produto adicionado com sucesso!', 'success');
+            loadProducts();
+            clearForm();
+        });
+
+        // Função para carregar produtos
+        function loadProducts() {
+            const productsList = document.getElementById('productsList');
+            productsList.innerHTML = '';
+
+            if (products.length === 0) {
+                productsList.innerHTML = '<p style="text-align: center; color: #666;">Nenhum produto cadastrado.</p>';
+                return;
+            }
+
+            products.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product-item';
+                productDiv.innerHTML = `
+                    <h3>${product.image} ${product.name}</h3>
+                    <div class="product-info">
+                        <span><strong>Categoria:</strong> ${getCategoryName(product.category)}</span>
+                        <span><strong>Preço:</strong> R$ ${product.price.toFixed(2)}</span>
+                        <span><strong>Link:</strong> <a href="${product.link}" target="_blank">Ver no Shopee</a></span>
+                        ${product.imageUrl ? `<span><strong>Imagem:</strong> <a href="${product.imageUrl}" target="_blank">Ver Imagem</a></span>` : ''}
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn" onclick="editProduct(${product.id})">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteProduct(${product.id})">Excluir</button>
+                    </div>
+                `;
+                productsList.appendChild(productDiv);
+            });
+        }
+
+        // Função para excluir produto
+        function deleteProduct(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                products = products.filter(product => product.id !== id);
+                localStorage.setItem('collshop_products', JSON.stringify(products));
+                loadProducts();
+                showMessage('Produto excluído com sucesso!', 'success');
+            }
+        }
+
+        // Função para editar produto
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCategory').value = product.category;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productLink').value = product.link;
+                document.getElementById('productImage').value = product.image;
+                document.getElementById('selectedEmoji').textContent = product.image;
+                document.getElementById('productImageUrl').value = product.imageUrl || '';
+                document.getElementById('productDescription').value = product.description || '';
+
+                // Preview da imagem se existir
+                if (product.imageUrl) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = product.imageUrl;
+                    preview.style.display = 'block';
+                }
+
+                // Remover produto antigo e adicionar novo
+                products = products.filter(p => p.id !== id);
+                showMessage('Produto carregado para edição. Clique em "Adicionar Produto" para salvar.', 'success');
+            }
+        }
+
+        // Função para limpar formulário
+        function clearForm() {
+            document.getElementById('productForm').reset();
+            document.getElementById('selectedEmoji').textContent = '📱';
+            document.getElementById('productImage').value = '📱';
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+
+        // Função para mostrar mensagens
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="${type}-message">${message}</div>`;
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        // Função para obter nome da categoria
+        function getCategoryName(category) {
+            const categories = {
+                'pets': 'Pets',
+                'fones': 'Fones',
+                'eletronicos': 'Eletrônicos',
+                'gamer': 'Gamer',
+                'utensilios': 'Utensílios',
+                'roupas': 'Roupas',
+                'cabos': 'Cabos',
+                'ferramentas': 'Ferramentas'
+            };
+            return categories[category] || category;
+        }
+
+        // Função para fazer logout
+        function logout() {
+            sessionStorage.removeItem('admin_logged_in');
+            sessionStorage.removeItem('admin_username');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

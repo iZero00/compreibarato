@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprei Barato - Produtos Shopee em Destaque</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            min-height: 100vh;
+            color: #333;
+            transition: background 0.5s ease;
+        }
+
+        /* Cores por categoria */
+        body.category-pets {
+            background: linear-gradient(135deg, #FF8A65 0%, #FF7043 100%);
+        }
+
+        body.category-fones {
+            background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%);
+        }
+
+        body.category-eletronicos {
+            background: linear-gradient(135deg, #FFCC02 0%, #FFB300 100%);
+        }
+
+        body.category-gamer {
+            background: linear-gradient(135deg, #FF5722 0%, #E64A19 100%);
+        }
+
+        body.category-utensilios {
+            background: linear-gradient(135deg, #FFAB40 0%, #FF8F00 100%);
+        }
+
+        body.category-roupas {
+            background: linear-gradient(135deg, #FF7043 0%, #FF5722 100%);
+        }
+
+        body.category-cabos {
+            background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%);
+        }
+
+        body.category-ferramentas {
+            background: linear-gradient(135deg, #FF8A65 0%, #FF7043 100%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FF6B35;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .category-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .category-btn {
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(45deg, #E64A19, #D84315);
+            box-shadow: 0 5px 15px rgba(230, 74, 25, 0.4);
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-title h2 {
+            color: #FF6B35;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .category-title h2 img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-title p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #FF6B35;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #FFF3E0, #FFE0B2);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #FF6B35;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #FFF3E0, #FFE0B2);
+        }
+
+        .product-image .emoji-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-image .emoji-fallback {
+            font-size: 3rem;
+            color: #FF6B35;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #FF6B35;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FF6B35;
+            margin-bottom: 15px;
+        }
+
+        .buy-button {
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .buy-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .shopee-badge {
+            background: #FF6B35;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+
+            .category-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .category-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">💰 Comprei Barato</div>
+            <div class="subtitle">Produtos Shopee em Destaque - As Melhores Ofertas!</div>
+        </div>
+
+        <div class="category-nav">
+            <div class="category-buttons">
+                <button class="category-btn active" onclick="showCategory('all')">Todos</button>
+                <button class="category-btn" onclick="showCategory('pets')">Pets</button>
+                <button class="category-btn" onclick="showCategory('fones')">Fones</button>
+                <button class="category-btn" onclick="showCategory('eletronicos')">Eletrônicos</button>
+                <button class="category-btn" onclick="showCategory('gamer')">Gamer</button>
+                <button class="category-btn" onclick="showCategory('utensilios')">Utensílios</button>
+                <button class="category-btn" onclick="showCategory('roupas')">Roupas</button>
+                <button class="category-btn" onclick="showCategory('cabos')">Cabos</button>
+                <button class="category-btn" onclick="showCategory('ferramentas')">Ferramentas</button>
+            </div>
+        </div>
+
+        <div id="productsContainer">
+            <!-- Produtos serão carregados dinamicamente aqui -->
+        </div>
+    </div>
+
+    <script>
+        // Carregar produtos do localStorage
+        let products = JSON.parse(localStorage.getItem('collshop_products')) || [];
+
+        // Produtos padrão se não houver produtos cadastrados
+        const defaultProducts = [];
+
+        // Se não há produtos cadastrados, usar os padrão
+        if (products.length === 0) {
+            products = defaultProducts;
+        }
+
+        // Função para carregar produtos
+        function loadProducts() {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+
+            // Agrupar produtos por categoria
+            const productsByCategory = {};
+            products.forEach(product => {
+                if (!productsByCategory[product.category]) {
+                    productsByCategory[product.category] = [];
+                }
+                productsByCategory[product.category].push(product);
+            });
+
+            // Criar seções para cada categoria
+            Object.keys(productsByCategory).forEach(category => {
+                const categorySection = document.createElement('div');
+                categorySection.className = 'category-section';
+                categorySection.id = category;
+
+                const categoryTitle = document.createElement('div');
+                categoryTitle.className = 'category-title';
+                categoryTitle.innerHTML = `
+                    <h2>${getCategoryIcon(category)} ${getCategoryName(category)}</h2>
+                    <p>${getCategoryDescription(category)}</p>
+                `;
+
+                const productsGrid = document.createElement('div');
+                productsGrid.className = 'products-grid';
+
+                productsByCategory[category].forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.onclick = () => window.open(product.link, '_blank');
+                    productCard.innerHTML = `
+                        <div class="shopee-badge">SHOPEE</div>
+                        <div class="product-image">
+                            ${product.imageUrl ? `<img src="${product.imageUrl}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` : ''}
+                            ${product.imageUrl ? `<div class="emoji-overlay">${product.image}</div>` : `<div class="emoji-fallback">${product.image}</div>`}
+                        </div>
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                        <button class="buy-button">Comprar Agora</button>
+                    `;
+                    productsGrid.appendChild(productCard);
+                });
+
+                categorySection.appendChild(categoryTitle);
+                categorySection.appendChild(productsGrid);
+                container.appendChild(categorySection);
+            });
+        }
+
+        // Função para mostrar categoria
+        function showCategory(category) {
+            const sections = document.querySelectorAll('.category-section');
+            const buttons = document.querySelectorAll('.category-btn');
+
+            // Esconder todas as categorias
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Remover classe active de todos os botões
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Mudar cor do background baseado na categoria
+            document.body.className = '';
+            if (category !== 'all') {
+                document.body.classList.add(`category-${category}`);
+            }
+
+            // Mostrar categoria selecionada
+            if (category === 'all') {
+                sections.forEach(section => {
+                    section.classList.remove('hidden');
+                });
+            } else {
+                const selectedSection = document.getElementById(category);
+                if (selectedSection) {
+                    selectedSection.classList.remove('hidden');
+                }
+            }
+
+            // Adicionar classe active ao botão clicado
+            event.target.classList.add('active');
+        }
+
+        // Função para obter nome da categoria
+        function getCategoryName(category) {
+            const categories = {
+                'pets': 'Pets',
+                'fones': 'Fones',
+                'eletronicos': 'Eletrônicos',
+                'gamer': 'Gamer',
+                'utensilios': 'Utensílios',
+                'roupas': 'Roupas',
+                'cabos': 'Cabos',
+                'ferramentas': 'Ferramentas'
+            };
+            return categories[category] || category;
+        }
+
+        // Função para obter ícone da categoria (usando as imagens personalizadas)
+        function getCategoryIcon(category) {
+            const icons = {
+                'pets': '<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNGRjZCMzUiLz4KPHBhdGggZD0iTTEwIDE1QzEwIDEyLjIzODYgMTIuMjM4NiAxMCAxNSAxMEgyNUMyNy43NjE0IDEwIDMwIDEyLjIzODYgMzAgMTVWMjVDMzAgMjcuNzYxNCAyNy43NjE0IDMwIDI1IDMwSDE1QzEyLjIzODYgMzAgMTAgMjcuNzYxNCAxMCAyNVYxNVoiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPgo8Y2lyY2xlIGN4PSIxOCIgY3k9IjE4IiByPSIyIiBmaWxsPSJibGFjayIvPgo8Y2lyY2xlIGN4PSIyMiIgY3k9IjE4IiByPSIyIiBmaWxsPSJibGFjayIvPgo8Y2lyY2xlIGN4PSIyMCIgY3k9IjIyIiByPSIxIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K" style="width: 24px; height: 24px; vertical-align: middle;">',
+                'fones': '<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNGRjZCMzUiLz4KPHBhdGggZD0iTTEyIDIwQzEyIDE1LjU4MTcgMTUuNTgxNyAxMiAyMCAxMkMyNC40MTgzIDEyIDI4IDE1LjU4MTcgMjggMjBDMjggMjQuNDE4MyAyNC40MTgzIDI4IDIwIDI4QzE1LjU4MTcgMjggMTIgMjQuNDE4MyAxMiAyMFoiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPgo8Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSI0IiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K" style="width: 24px; height: 24px; vertical-align: middle;">',
+                'eletronicos': '<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNGRjZCMzUiLz4KPHBhdGggZD0iTTEwIDEySDE2VjE4SDEwVjEyWiIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+CjxwYXRoIGQ9Ik0xOCAxMkgyNFYxOEgxOFYxMloiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPgo8Y2lyY2xlIGN4PSIxNCIgY3k9IjE0IiByPSIxIiBmaWxsPSJibGFjayIvPgo8Y2lyY2xlIGN4PSIyNiIgY3k9IjE0IiByPSIxIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K" style="width: 24px; height: 24px; vertical-align: middle;">',
+                'gamer': '<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNGRjZCMzUiLz4KPHBhdGggZD0iTTEyIDE2TDE2IDEyTDIwIDE2TDI0IDEyTDI4IDE2VjI0SDEyVjE2WiIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+CjxjaXJjbGUgY3g9IjE2IiBjeT0iMjAiIHI9IjEiIGZpbGw9ImJsYWNrIi8+CjxjaXJjbGUgY3g9IjI0IiBjeT0iMjAiIHI9IjEiIGZpbGw9ImJsYWNrIi8+Cjwvc3ZnPgo=" style="width: 24px; height: 24px; vertical-align: middle;">',
+                'utensilios': '<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNGRjZCMzUiLz4KPHBhdGggZD0iTTE2IDEyTDIwIDE2TDI0IDEyIiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTE2IDI4TDIwIDI0TDI0IDI4IiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+Cg==" style="width: 24px; height: 24px; vertical-align: middle;">',
+                'roupas': '<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNGRjZCMzUiLz4KPHBhdGggZD0iTTEyIDE0SDE2VjE4SDEyVjE0WiIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+CjxwYXRoIGQ9Ik0xOCAxNEgyMlYxOEgxOFYxNFoiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPgo8Y2lyY2xlIGN4PSIxNCIgY3k9IjE2IiByPSIxIiBmaWxsPSJibGFjayIvPgo8Y2lyY2xlIGN4PSIyNiIgY3k9IjE2IiByPSIxIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K" style="width: 24px; height: 24px; vertical-align: middle;">',
+                'cabos': '<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNGRjZCMzUiLz4KPHBhdGggZD0iTTEyIDEyTDIwIDIwTDI4IDEyIiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjIiLz4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMSIgZmlsbD0iYmxhY2siLz4KPGNpcmNsZSBjeD0iMjQiIGN5PSIxNiIgcj0iMSIgZmlsbD0iYmxhY2siLz4KPC9zdmc+Cg==" style="width: 24px; height: 24px; vertical-align: middle;">',
+                'ferramentas': '<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNGRjZCMzUiLz4KPHBhdGggZD0iTTE2IDEyTDIwIDE2TDI0IDEyIiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTE2IDI4TDIwIDI0TDI0IDI4IiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjIiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iYmxhY2siLz4KPC9zdmc+Cg==" style="width: 24px; height: 24px; vertical-align: middle;">'
+            };
+            return icons[category] || '🛍️';
+        }
+
+        // Função para obter descrição da categoria
+        function getCategoryDescription(category) {
+            const descriptions = {
+                'pets': 'Produtos para seus melhores amigos',
+                'fones': 'Fones de ouvido e acessórios de áudio',
+                'eletronicos': 'Os melhores produtos de tecnologia',
+                'gamer': 'Produtos para gamers de verdade',
+                'utensilios': 'Utensílios para casa e cozinha',
+                'roupas': 'Roupas e acessórios para todos os estilos',
+                'cabos': 'Cabos e conectores de qualidade',
+                'ferramentas': 'Ferramentas profissionais e domésticas'
+            };
+            return descriptions[category] || 'Produtos em destaque';
+        }
+
+        // Carregar produtos ao iniciar
+        loadProducts();
+
+        // Atualizar produtos a cada 5 segundos (para sincronizar com admin)
+        setInterval(() => {
+            const newProducts = JSON.parse(localStorage.getItem('collshop_products')) || [];
+            if (JSON.stringify(newProducts) !== JSON.stringify(products)) {
+                products = newProducts;
+                loadProducts();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
+
+
