@@ -202,7 +202,7 @@
   "auth": {
     "admin_credentials": {
       "username": "admin",
-      "password_hash": "70bffd93",
+      "password_hash": "5525bb73",
       "salt": "compreibarato2024",
       "created_at": "2024-12-19T10:00:00Z",
       "last_login": null,

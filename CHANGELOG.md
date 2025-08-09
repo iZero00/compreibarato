@@ -108,7 +108,7 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 - **Validação**: Verificação de campos obrigatórios
 
 #### Sistema de Autenticação
-- **Credenciais**: Usuário `admin`, Senha `admin`
+- **Credenciais**: Usuário `admin`, Senha `administrador`
 - **Sessões**: Timeout de 1 hora de inatividade
 - **Proteção**: Bloqueio após 5 tentativas (15 minutos)
 - **Logs**: Registro de tentativas de login
