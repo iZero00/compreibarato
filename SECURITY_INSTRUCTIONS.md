@@ -90,7 +90,7 @@ console.log(calculateHash("minha_nova_senha"));
 4. **REMOVA ARQUIVOS SENSÍVEIS** do cliente
 
 ### **Para Desenvolvimento:**
-- As credenciais `admin/admin` são apenas para desenvolvimento
+- As credenciais `admin/administrador` são apenas para desenvolvimento
 - Não use estas credenciais em ambiente de produção
 - Sempre teste as proteções de segurança
 
