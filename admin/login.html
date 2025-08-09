@@ -155,7 +155,7 @@
         <a href="../index.html" class="back-link">← Voltar ao Site</a>
     </div>
 
-    <script src="../database.js"></script>
+    <script src="../database_simple.js"></script>
     <script>
         // Função para validar entrada
         function validateInput(input) {
@@ -188,8 +188,8 @@
                 return;
             }
 
-            if (password.length < 6) {
-                errorMessage.textContent = 'Senha deve ter pelo menos 6 caracteres!';
+            if (password.length < 3) {
+                errorMessage.textContent = 'Senha deve ter pelo menos 3 caracteres!';
                 errorMessage.style.display = 'block';
                 return;
             }
@@ -207,15 +207,16 @@
                     errorMessage.style.display = 'none';
                     
                     // Criar sessão
-                    const sessionToken = dbManager.createSession();
+                    const sessionData = dbManager.createSession();
                     
                     // Salvar estado de login
                     sessionStorage.setItem('admin_logged_in', 'true');
                     sessionStorage.setItem('admin_username', username);
-                    sessionStorage.setItem('admin_session_token', sessionToken);
+                    sessionStorage.setItem('admin_session_token', JSON.stringify(sessionData));
+                    sessionStorage.setItem('admin_last_login', new Date().toISOString());
                     
                     // Redirecionar para o painel admin
-                    window.location.href = 'index.html';
+                    window.location.href = 'admin.html';
                 } else {
                     // Login falhou
                     errorMessage.textContent = result.message;
