@@ -14,7 +14,7 @@
     <meta name="author" content="Vinicius">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://compreibarato.com/">
-    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+    <link rel="icon" type="image/png" href="assets/icons/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -72,6 +72,15 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
         }
 
         .subtitle {
@@ -85,6 +94,10 @@
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
+            justify-content: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .category-btn {
@@ -191,6 +204,9 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
+            justify-content: center;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .product-card {
