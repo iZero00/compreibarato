@@ -21,7 +21,7 @@ Site moderno e responsivo para exibir produtos da Shopee organizados por categor
 - **Login Seguro**: Hash de senhas com salt
 - **Sessões**: Timeout automático de 1 hora
 - **Proteção**: Bloqueio após 5 tentativas de login
-- **Credenciais**: Usuário: `admin`, Senha: `admin`
+- **Credenciais**: Usuário: `admin`, Senha: `administrador`
 
 ### 📊 Painel Administrativo
 - **CRUD Produtos**: Adicionar, editar, remover produtos
@@ -48,7 +48,7 @@ http://localhost/admin/login.html
 
 **Credenciais:**
 - **Usuário:** `admin`
-- **Senha:** `admin`
+- **Senha:** `administrador`
 
 ### 3. Testar o Sistema
 ```
