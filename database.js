@@ -1,39 +1,43 @@
-/**
- * Database Manager for Comprei Barato
- * Gerencia o banco de dados JSON do site
- */
-
+// Database Manager - Sistema de Gerenciamento de Banco de Dados
 class DatabaseManager {
     constructor() {
         this.database = null;
-        this.filePath = './database.json';
-        this.backupPath = './backups/';
+        this.databasePath = './database.json';
+        this.init();
     }
 
-    /**
-     * Carrega o banco de dados do arquivo JSON
-     */
-    async loadDatabase() {
+    // Inicializar o banco de dados
+    async init() {
         try {
-            const response = await fetch(this.filePath);
-            this.database = await response.json();
-            return this.database;
+            await this.loadDatabase();
         } catch (error) {
-            console.error('Erro ao carregar banco de dados:', error);
-            return this.createDefaultDatabase();
+            console.error('Erro ao inicializar banco de dados:', error);
+            this.createDefaultDatabase();
         }
     }
 
-    /**
-     * Cria um banco de dados padrão
-     */
+    // Carregar banco de dados do arquivo JSON
+    async loadDatabase() {
+        try {
+            const response = await fetch(this.databasePath);
+            if (!response.ok) {
+                throw new Error('Arquivo database.json não encontrado');
+            }
+            this.database = await response.json();
+        } catch (error) {
+            console.error('Erro ao carregar banco de dados:', error);
+            this.createDefaultDatabase();
+        }
+    }
+
+    // Criar banco de dados padrão
     createDefaultDatabase() {
         this.database = {
             site_info: {
                 name: "Comprei Barato",
                 description: "Descubra as melhores ofertas da Shopee em um só lugar",
                 version: "1.0.0",
-                last_updated: new Date().toISOString()
+                last_updated: new Date().toISOString().split('T')[0]
             },
             categories: {
                 pets: {
@@ -93,7 +97,107 @@ class DatabaseManager {
                     active: true
                 }
             },
-            products: [],
+            products: [
+                {
+                    id: 1,
+                    name: "Ração Premium para Cães",
+                    category: "pets",
+                    link: "https://shopee.com.br/racao-caes",
+                    image: "assets/icons/pets.png",
+                    imageUrl: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    active: true
+                },
+                {
+                    id: 2,
+                    name: "Fones Bluetooth Wireless",
+                    category: "fones",
+                    link: "https://shopee.com.br/fones-bluetooth",
+                    image: "assets/icons/audio.png",
+                    imageUrl: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    active: true
+                },
+                {
+                    id: 3,
+                    name: "Smartphone Android",
+                    category: "eletronicos",
+                    link: "https://shopee.com.br/smartphone",
+                    image: "assets/icons/eletronicos.png",
+                    imageUrl: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    active: true
+                },
+                {
+                    id: 4,
+                    name: "Boneco Labubu vinil",
+                    category: "eletronicos",
+                    link: "https://shopee.com.br/boneco-labubu",
+                    image: "assets/icons/eletronicos.png",
+                    imageUrl: "https://down-br.img.susercontent.com/file/br-11134207-7rndo-lhxqjqjqjqjqjq",
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    active: true
+                },
+                {
+                    id: 5,
+                    name: "Mouse Gamer RGB",
+                    category: "gamer",
+                    link: "https://shopee.com.br/mouse-gamer",
+                    image: "assets/icons/gamer.png",
+                    imageUrl: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    active: true
+                },
+                {
+                    id: 6,
+                    name: "Kit de Panelas Antiaderente",
+                    category: "utensilios",
+                    link: "https://shopee.com.br/kit-panelas",
+                    image: "assets/icons/utensilios.png",
+                    imageUrl: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    active: true
+                },
+                {
+                    id: 7,
+                    name: "Camiseta Básica",
+                    category: "roupas",
+                    link: "https://shopee.com.br/camiseta-basica",
+                    image: "assets/icons/roupas.png",
+                    imageUrl: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    active: true
+                },
+                {
+                    id: 8,
+                    name: "Cabo USB-C",
+                    category: "cabos",
+                    link: "https://shopee.com.br/cabo-usb-c",
+                    image: "assets/icons/cabos.png",
+                    imageUrl: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    active: true
+                },
+                {
+                    id: 9,
+                    name: "Furadeira Elétrica",
+                    category: "ferramentas",
+                    link: "https://shopee.com.br/furadeira-eletrica",
+                    image: "assets/icons/ferramentas.png",
+                    imageUrl: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    active: true
+                }
+            ],
             settings: {
                 theme: {
                     primary_color: "#667eea",
@@ -117,7 +221,7 @@ class DatabaseManager {
                 }
             },
             analytics: {
-                total_products: 0,
+                total_products: 9,
                 total_categories: 8,
                 most_viewed_category: "eletronicos",
                 last_backup: new Date().toISOString(),
@@ -128,392 +232,179 @@ class DatabaseManager {
                 backup_frequency: "daily",
                 backup_location: "./backups/",
                 auto_backup: true
+            },
+            auth: {
+                admin_credentials: {
+                    username: "admin",
+                    password_hash: "5525bb73",
+                    salt: "compreibarato2024",
+                    created_at: new Date().toISOString(),
+                    last_login: null,
+                    active: true,
+                    login_attempts: 0,
+                    lockout_until: null
+                },
+                session_timeout: 3600,
+                max_login_attempts: 5,
+                lockout_duration: 900
             }
         };
-        return this.database;
     }
 
-    /**
-     * Salva o banco de dados no arquivo JSON
-     */
+    // Salvar banco de dados
     async saveDatabase() {
         try {
-            this.database.site_info.last_updated = new Date().toISOString();
+            // Atualizar analytics
             this.database.analytics.total_products = this.database.products.length;
+            this.database.analytics.last_backup = new Date().toISOString();
             
-            const response = await fetch(this.filePath, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(this.database, null, 2)
-            });
-            
-            if (response.ok) {
-                console.log('Banco de dados salvo com sucesso');
-                return true;
-            } else {
-                throw new Error('Erro ao salvar banco de dados');
-            }
+            // Em um ambiente real, aqui seria feita uma requisição POST para salvar
+            // Por enquanto, vamos simular salvamento no localStorage
+            localStorage.setItem('compreibarato_database', JSON.stringify(this.database));
+            return true;
         } catch (error) {
             console.error('Erro ao salvar banco de dados:', error);
             return false;
         }
     }
 
-    /**
-     * Adiciona um novo produto
-     */
-    async addProduct(productData) {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
+    // CRUD de Produtos
+    async getAllProducts() {
+        return this.database.products.filter(product => product.active);
+    }
 
+    async getProductById(id) {
+        return this.database.products.find(product => product.id === id && product.active);
+    }
+
+    async addProduct(productData) {
         const newProduct = {
             id: this.getNextProductId(),
-            name: productData.name,
-            category: productData.category,
-            link: productData.link,
-            image: productData.image,
-            imageUrl: productData.imageUrl || null,
+            ...productData,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
             active: true
         };
-
+        
         this.database.products.push(newProduct);
         await this.saveDatabase();
         return newProduct;
     }
 
-    /**
-     * Edita um produto existente
-     */
-    async editProduct(productId, productData) {
-        if (!this.database) {
-            await this.loadDatabase();
+    async updateProduct(id, productData) {
+        const productIndex = this.database.products.findIndex(p => p.id === id);
+        if (productIndex !== -1) {
+            this.database.products[productIndex] = {
+                ...this.database.products[productIndex],
+                ...productData,
+                updated_at: new Date().toISOString()
+            };
+            await this.saveDatabase();
+            return this.database.products[productIndex];
         }
-
-        const productIndex = this.database.products.findIndex(p => p.id === productId);
-        if (productIndex === -1) {
-            throw new Error('Produto não encontrado');
-        }
-
-        this.database.products[productIndex] = {
-            ...this.database.products[productIndex],
-            ...productData,
-            updated_at: new Date().toISOString()
-        };
-
-        await this.saveDatabase();
-        return this.database.products[productIndex];
+        return null;
     }
 
-    /**
-     * Remove um produto
-     */
-    async deleteProduct(productId) {
-        if (!this.database) {
-            await this.loadDatabase();
+    async deleteProduct(id) {
+        const productIndex = this.database.products.findIndex(p => p.id === id);
+        if (productIndex !== -1) {
+            this.database.products[productIndex].active = false;
+            await this.saveDatabase();
+            return true;
         }
-
-        const productIndex = this.database.products.findIndex(p => p.id === productId);
-        if (productIndex === -1) {
-            throw new Error('Produto não encontrado');
-        }
-
-        this.database.products.splice(productIndex, 1);
-        await this.saveDatabase();
-        return true;
+        return false;
     }
 
-    /**
-     * Obtém todos os produtos
-     */
-    async getAllProducts() {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-        return this.database.products.filter(product => product.active);
-    }
-
-    /**
-     * Obtém produtos por categoria
-     */
-    async getProductsByCategory(category) {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-        return this.database.products.filter(product => 
-            product.category === category && product.active
-        );
-    }
-
-    /**
-     * Obtém um produto específico
-     */
-    async getProduct(productId) {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-        return this.database.products.find(p => p.id === productId && p.active);
-    }
-
-    /**
-     * Obtém todas as categorias
-     */
+    // CRUD de Categorias
     async getAllCategories() {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-        return Object.keys(this.database.categories).filter(key => 
-            this.database.categories[key].active
-        );
+        return Object.keys(this.database.categories).map(key => ({
+            id: key,
+            ...this.database.categories[key]
+        }));
     }
 
-    /**
-     * Obtém informações de uma categoria
-     */
-    async getCategory(categoryKey) {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-        return this.database.categories[categoryKey];
+    async getCategoryById(id) {
+        return this.database.categories[id] || null;
     }
 
-    /**
-     * Adiciona uma nova categoria
-     */
-    async addCategory(categoryKey, categoryData) {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-
-        this.database.categories[categoryKey] = {
-            name: categoryData.name,
-            description: categoryData.description,
-            icon: categoryData.icon,
-            color: categoryData.color,
+    async addCategory(categoryData) {
+        const categoryId = categoryData.id || this.generateCategoryId(categoryData.name);
+        this.database.categories[categoryId] = {
+            ...categoryData,
             active: true
         };
-
         await this.saveDatabase();
-        return this.database.categories[categoryKey];
+        return this.database.categories[categoryId];
     }
 
-    /**
-     * Edita uma categoria existente
-     */
-    async editCategory(categoryKey, categoryData) {
-        if (!this.database) {
-            await this.loadDatabase();
+    async updateCategory(id, categoryData) {
+        if (this.database.categories[id]) {
+            this.database.categories[id] = {
+                ...this.database.categories[id],
+                ...categoryData
+            };
+            await this.saveDatabase();
+            return this.database.categories[id];
         }
-
-        if (!this.database.categories[categoryKey]) {
-            throw new Error('Categoria não encontrada');
-        }
-
-        this.database.categories[categoryKey] = {
-            ...this.database.categories[categoryKey],
-            ...categoryData
-        };
-
-        await this.saveDatabase();
-        return this.database.categories[categoryKey];
+        return null;
     }
 
-    /**
-     * Remove uma categoria
-     */
-    async deleteCategory(categoryKey) {
-        if (!this.database) {
-            await this.loadDatabase();
+    async deleteCategory(id) {
+        if (this.database.categories[id]) {
+            this.database.categories[id].active = false;
+            await this.saveDatabase();
+            return true;
         }
-
-        if (!this.database.categories[categoryKey]) {
-            throw new Error('Categoria não encontrada');
-        }
-
-        // Remove a categoria
-        delete this.database.categories[categoryKey];
-
-        // Remove produtos da categoria
-        this.database.products = this.database.products.filter(
-            product => product.category !== categoryKey
-        );
-
-        await this.saveDatabase();
-        return true;
+        return false;
     }
 
-    /**
-     * Obtém configurações do site
-     */
+    // Configurações
     async getSettings() {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
         return this.database.settings;
     }
 
-    /**
-     * Atualiza configurações do site
-     */
-    async updateSettings(newSettings) {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-
+    async updateSettings(settings) {
         this.database.settings = {
             ...this.database.settings,
-            ...newSettings
+            ...settings
         };
-
         await this.saveDatabase();
         return this.database.settings;
     }
 
-    /**
-     * Obtém estatísticas do site
-     */
+    // Analytics
     async getAnalytics() {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
         return this.database.analytics;
     }
 
-    /**
-     * Atualiza estatísticas
-     */
-    async updateAnalytics(analyticsData) {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-
+    async updateAnalytics(analytics) {
         this.database.analytics = {
             ...this.database.analytics,
-            ...analyticsData
+            ...analytics
         };
-
         await this.saveDatabase();
         return this.database.analytics;
     }
 
-    /**
-     * Cria backup do banco de dados
-     */
+    // Backup
     async createBackup() {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-
-        const backupData = {
-            ...this.database,
-            backup: {
-                ...this.database.backup,
-                last_backup_date: new Date().toISOString()
-            }
+        const backup = {
+            timestamp: new Date().toISOString(),
+            data: JSON.parse(JSON.stringify(this.database))
         };
-
-        const backupFileName = `backup_${new Date().toISOString().split('T')[0]}.json`;
-        const backupPath = `${this.backupPath}${backupFileName}`;
-
-        try {
-            // Em um ambiente real, você salvaria o arquivo aqui
-            console.log('Backup criado:', backupPath);
-            this.database.backup.last_backup_date = new Date().toISOString();
-            await this.saveDatabase();
-            return backupPath;
-        } catch (error) {
-            console.error('Erro ao criar backup:', error);
-            return null;
-        }
-    }
-
-    /**
-     * Restaura backup do banco de dados
-     */
-    async restoreBackup(backupPath) {
-        try {
-            const response = await fetch(backupPath);
-            const backupData = await response.json();
-            
-            this.database = backupData;
-            await this.saveDatabase();
-            
-            console.log('Backup restaurado com sucesso');
-            return true;
-        } catch (error) {
-            console.error('Erro ao restaurar backup:', error);
-            return false;
-        }
-    }
-
-    /**
-     * Gera próximo ID de produto
-     */
-    getNextProductId() {
-        if (!this.database || !this.database.products.length) {
-            return 1;
-        }
-        return Math.max(...this.database.products.map(p => p.id)) + 1;
-    }
-
-    /**
-     * Sincroniza com localStorage (para compatibilidade)
-     */
-    async syncWithLocalStorage() {
-        const localStorageProducts = JSON.parse(localStorage.getItem('collshop_products')) || [];
         
-        if (localStorageProducts.length > 0) {
-            // Migra produtos do localStorage para o banco JSON
-            for (const product of localStorageProducts) {
-                await this.addProduct({
-                    name: product.name,
-                    category: product.category,
-                    link: product.link,
-                    image: product.image,
-                    imageUrl: product.imageUrl
-                });
-            }
-            
-            // Limpa localStorage após migração
-            localStorage.removeItem('collshop_products');
-            console.log('Produtos migrados do localStorage para o banco JSON');
-        }
+        // Em um ambiente real, aqui seria salvo em arquivo
+        localStorage.setItem('compreibarato_backup_' + Date.now(), JSON.stringify(backup));
+        
+        this.database.backup.last_backup_date = new Date().toISOString();
+        await this.saveDatabase();
+        
+        return backup;
     }
 
-    /**
-     * Exporta dados para JSON
-     */
-    exportToJSON() {
-        if (!this.database) {
-            return null;
-        }
-        return JSON.stringify(this.database, null, 2);
-    }
-
-    /**
-     * Importa dados de JSON
-     */
-    async importFromJSON(jsonData) {
-        try {
-            const importedData = JSON.parse(jsonData);
-            this.database = importedData;
-            await this.saveDatabase();
-            console.log('Dados importados com sucesso');
-            return true;
-        } catch (error) {
-            console.error('Erro ao importar dados:', error);
-            return false;
-        }
-    }
-
-    /**
-     * Função simples de hash para senha (em produção, use bcrypt ou similar)
-     */
-    hashPassword(password, salt) {
+    // Autenticação
+    hashPassword(password, salt = "compreibarato2024") {
+        // Hash simples para demonstração (em produção, usar bcrypt ou similar)
         let hash = 0;
         const str = password + salt;
         for (let i = 0; i < str.length; i++) {
@@ -524,170 +415,136 @@ class DatabaseManager {
         return Math.abs(hash).toString(16);
     }
 
-    /**
-     * Verifica credenciais de login
-     */
     async verifyCredentials(username, password) {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-
-        const auth = this.database.auth;
-        const credentials = auth.admin_credentials;
-
-        if (!credentials.active) {
-            return { success: false, message: 'Conta desativada' };
-        }
-
-        // Verifica se a conta está bloqueada
+        const credentials = this.database.auth.admin_credentials;
+        
+        // Verificar se está bloqueado
         if (credentials.lockout_until && new Date() < new Date(credentials.lockout_until)) {
-            return { success: false, message: 'Conta temporariamente bloqueada' };
+            return { success: false, message: "Conta temporariamente bloqueada. Tente novamente mais tarde." };
         }
-
-        // Verifica username e senha
-        if (credentials.username === username) {
-            const hashedPassword = this.hashPassword(password, credentials.salt);
-            if (hashedPassword === credentials.password_hash) {
-                // Login bem-sucedido
-                credentials.last_login = new Date().toISOString();
-                credentials.login_attempts = 0;
-                credentials.lockout_until = null;
-                await this.saveDatabase();
-                
-                return { 
-                    success: true, 
-                    message: 'Login realizado com sucesso',
-                    session_token: this.generateSessionToken()
-                };
+        
+        // Verificar credenciais
+        const hashedPassword = this.hashPassword(password, credentials.salt);
+        if (username === credentials.username && hashedPassword === credentials.password_hash) {
+            // Reset tentativas de login
+            credentials.login_attempts = 0;
+            credentials.lockout_until = null;
+            credentials.last_login = new Date().toISOString();
+            await this.saveDatabase();
+            
+            return { success: true, message: "Login realizado com sucesso!" };
+        } else {
+            // Incrementar tentativas de login
+            credentials.login_attempts++;
+            
+            // Verificar se deve bloquear
+            if (credentials.login_attempts >= this.database.auth.max_login_attempts) {
+                const lockoutTime = new Date();
+                lockoutTime.setSeconds(lockoutTime.getSeconds() + this.database.auth.lockout_duration);
+                credentials.lockout_until = lockoutTime.toISOString();
             }
+            
+            await this.saveDatabase();
+            
+            return { 
+                success: false, 
+                message: `Credenciais inválidas. Tentativas restantes: ${Math.max(0, this.database.auth.max_login_attempts - credentials.login_attempts)}` 
+            };
         }
-
-        // Login falhou
-        credentials.login_attempts = (credentials.login_attempts || 0) + 1;
-        
-        if (credentials.login_attempts >= auth.max_login_attempts) {
-            credentials.lockout_until = new Date(Date.now() + (auth.lockout_duration * 1000)).toISOString();
-        }
-        
-        await this.saveDatabase();
-        
-        return { 
-            success: false, 
-            message: 'Usuário ou senha incorretos',
-            attempts_remaining: auth.max_login_attempts - credentials.login_attempts
-        };
     }
 
-    /**
-     * Gera token de sessão
-     */
     generateSessionToken() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let token = '';
-        for (let i = 0; i < 32; i++) {
-            token += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return token;
+        return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
 
-    /**
-     * Verifica se a sessão é válida
-     */
-    async validateSession(sessionToken) {
-        if (!this.database) {
-            await this.loadDatabase();
+    validateSession(sessionToken) {
+        // Em um ambiente real, verificar token no servidor
+        const session = sessionStorage.getItem('admin_session');
+        if (session) {
+            const sessionData = JSON.parse(session);
+            const now = new Date();
+            const sessionTime = new Date(sessionData.created_at);
+            const diffInSeconds = (now - sessionTime) / 1000;
+            
+            return diffInSeconds < this.database.auth.session_timeout;
         }
-
-        // Em um ambiente real, você armazenaria os tokens de sessão no banco
-        // Por simplicidade, vamos usar localStorage para armazenar o token
-        const storedToken = localStorage.getItem('admin_session_token');
-        const sessionExpiry = localStorage.getItem('admin_session_expiry');
-
-        if (!storedToken || !sessionExpiry) {
-            return false;
-        }
-
-        if (new Date() > new Date(sessionExpiry)) {
-            localStorage.removeItem('admin_session_token');
-            localStorage.removeItem('admin_session_expiry');
-            return false;
-        }
-
-        return storedToken === sessionToken;
+        return false;
     }
 
-    /**
-     * Cria uma nova sessão
-     */
     createSession() {
-        const token = this.generateSessionToken();
-        const expiry = new Date(Date.now() + (this.database.auth.session_timeout * 1000));
-        
-        localStorage.setItem('admin_session_token', token);
-        localStorage.setItem('admin_session_expiry', expiry.toISOString());
-        
-        return token;
+        const sessionData = {
+            token: this.generateSessionToken(),
+            created_at: new Date().toISOString(),
+            user: 'admin'
+        };
+        sessionStorage.setItem('admin_session', JSON.stringify(sessionData));
+        return sessionData;
     }
 
-    /**
-     * Remove a sessão atual
-     */
     destroySession() {
-        localStorage.removeItem('admin_session_token');
-        localStorage.removeItem('admin_session_expiry');
+        sessionStorage.removeItem('admin_session');
     }
 
-    /**
-     * Altera a senha do admin (DESABILITADO POR SEGURANÇA)
-     */
-    async changePassword(currentPassword, newPassword) {
-        // Função desabilitada por segurança
-        console.warn('⚠️ Função changePassword foi desabilitada por segurança');
-        return { 
-            success: false, 
-            message: 'Alteração de senha desabilitada por segurança. Contate o administrador.' 
-        };
+    // Função de mudança de senha DESABILITADA por segurança
+    async changePassword(newPassword) {
+        // DESABILITADO: Previne manipulação via console
+        console.warn('Função changePassword foi desabilitada por segurança.');
+        return { success: false, message: "Função desabilitada por segurança." };
     }
 
-    /**
-     * Obtém informações de autenticação (PROTEGIDO)
-     */
-    async getAuthInfo() {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-        
-        // Retorna apenas informações não sensíveis
-        const authInfo = this.database.auth;
+    // Obter informações de autenticação (sem dados sensíveis)
+    getAuthInfo() {
+        const credentials = this.database.auth.admin_credentials;
         return {
-            session_timeout: authInfo.session_timeout,
-            max_login_attempts: authInfo.max_login_attempts,
-            lockout_duration: authInfo.lockout_duration,
-            // Não retorna credenciais sensíveis
-            has_credentials: !!authInfo.admin_credentials
+            username: credentials.username,
+            last_login: credentials.last_login,
+            login_attempts: credentials.login_attempts,
+            lockout_until: credentials.lockout_until,
+            active: credentials.active
         };
+    }
+
+    // Utilitários
+    getNextProductId() {
+        const maxId = Math.max(...this.database.products.map(p => p.id), 0);
+        return maxId + 1;
+    }
+
+    generateCategoryId(name) {
+        return name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    }
+
+    // Sanitização de dados
+    sanitizeInput(input) {
+        if (typeof input !== 'string') return '';
+        return input.replace(/[<>\"'&]/g, '').trim();
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 }
 
-// Instância global do gerenciador de banco de dados
+// Criar instância global
 const dbManager = new DatabaseManager();
 
-// Proteção contra manipulação via console
+// PROTEGER OBJETOS CONTRA MANIPULAÇÃO VIA CONSOLE
+Object.freeze(DatabaseManager.prototype);
 Object.freeze(dbManager);
-Object.defineProperty(window, 'dbManager', {
-    value: dbManager,
-    writable: false,
-    configurable: false
-});
 
-// Exporta para uso em outros arquivos
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = DatabaseManager;
-} else {
-    // Proteger a classe também
-    Object.defineProperty(window, 'DatabaseManager', {
-        value: DatabaseManager,
-        writable: false,
-        configurable: false
-    });
+// Desabilitar console.log para dados sensíveis
+const originalConsoleLog = console.log;
+console.log = function(...args) {
+    const message = args.join(' ');
+    if (message.includes('password') || message.includes('hash') || message.includes('salt')) {
+        return; // Não logar informações sensíveis
+    }
+    originalConsoleLog.apply(console, args);
+};
+
+// Exportar para uso global
+if (typeof window !== 'undefined') {
+    window.dbManager = dbManager;
 }

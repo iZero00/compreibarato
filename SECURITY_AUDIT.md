@@ -37,7 +37,7 @@
 #### ⚠️ **Vulnerabilidades:**
 - **CRÍTICO:** Credenciais armazenadas no cliente (`database.json`)
 - **ALTO:** Hash simples (não usa bcrypt/argon2)
-- **MÉDIO:** Senha padrão `admin/admin` muito fraca
+- **MÉDIO:** Senha padrão `admin/administrador` muito fraca
 - **MÉDIO:** Falta de rate limiting por IP
 
 #### 📋 **Recomendações:**
