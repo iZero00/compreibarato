@@ -144,29 +144,61 @@
         <a href="../index.html" class="back-link">← Voltar ao Site</a>
     </div>
 
+    <script src="../database.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        // Verificar se já está logado
+        if (sessionStorage.getItem('admin_logged_in') === 'true') {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
+            const loginBtn = document.querySelector('.login-btn');
             
-            // Verificar credenciais
-            if (username === 'Vinicius' && password === 'Dio??157**') {
-                // Login bem-sucedido
-                errorMessage.style.display = 'none';
+            // Desabilitar botão durante verificação
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Verificando...';
+            
+            try {
+                // Verificar credenciais usando o banco de dados
+                const result = await dbManager.verifyCredentials(username, password);
                 
-                // Salvar estado de login
-                sessionStorage.setItem('admin_logged_in', 'true');
-                sessionStorage.setItem('admin_username', username);
-                
-                // Redirecionar para o painel admin
-                window.location.href = 'index.html';
-            } else {
-                // Login falhou
+                if (result.success) {
+                    // Login bem-sucedido
+                    errorMessage.style.display = 'none';
+                    
+                    // Criar sessão
+                    const sessionToken = dbManager.createSession();
+                    
+                    // Salvar estado de login
+                    sessionStorage.setItem('admin_logged_in', 'true');
+                    sessionStorage.setItem('admin_username', username);
+                    sessionStorage.setItem('admin_session_token', sessionToken);
+                    
+                    // Redirecionar para o painel admin
+                    window.location.href = 'index.html';
+                } else {
+                    // Login falhou
+                    errorMessage.textContent = result.message;
+                    errorMessage.style.display = 'block';
+                    document.getElementById('password').value = '';
+                    
+                    if (result.attempts_remaining !== undefined) {
+                        errorMessage.textContent += ` (${result.attempts_remaining} tentativas restantes)`;
+                    }
+                }
+            } catch (error) {
+                console.error('Erro durante login:', error);
+                errorMessage.textContent = 'Erro ao conectar com o banco de dados';
                 errorMessage.style.display = 'block';
-                document.getElementById('password').value = '';
+            } finally {
+                // Reabilitar botão
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Entrar';
             }
         });
     </script>

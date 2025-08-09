@@ -1,0 +1,215 @@
+{
+  "site_info": {
+    "name": "Comprei Barato",
+    "description": "Descubra as melhores ofertas da Shopee em um só lugar",
+    "version": "1.0.0",
+    "last_updated": "2024-12-19"
+  },
+  "categories": {
+    "pets": {
+      "name": "Pets",
+      "description": "Produtos para seus melhores amigos",
+      "icon": "assets/icons/pets.png",
+      "color": "#ff9a9e",
+      "active": true
+    },
+    "fones": {
+      "name": "Fones",
+      "description": "Fones de ouvido e acessórios de áudio",
+      "icon": "assets/icons/audio.png",
+      "color": "#a8edea",
+      "active": true
+    },
+    "eletronicos": {
+      "name": "Eletrônicos",
+      "description": "Os melhores produtos de tecnologia",
+      "icon": "assets/icons/eletronicos.png",
+      "color": "#ffecd2",
+      "active": true
+    },
+    "gamer": {
+      "name": "Gamer",
+      "description": "Produtos para gamers de verdade",
+      "icon": "assets/icons/gamer.png",
+      "color": "#ff9a9e",
+      "active": true
+    },
+    "utensilios": {
+      "name": "Utensílios",
+      "description": "Utensílios para casa e cozinha",
+      "icon": "assets/icons/utensilios.png",
+      "color": "#a8edea",
+      "active": true
+    },
+    "roupas": {
+      "name": "Roupas",
+      "description": "Roupas e acessórios para todos os estilos",
+      "icon": "assets/icons/roupas.png",
+      "color": "#ffecd2",
+      "active": true
+    },
+    "cabos": {
+      "name": "Cabos",
+      "description": "Cabos e conectores de qualidade",
+      "icon": "assets/icons/cabos.png",
+      "color": "#ff9a9e",
+      "active": true
+    },
+    "ferramentas": {
+      "name": "Ferramentas",
+      "description": "Ferramentas profissionais e domésticas",
+      "icon": "assets/icons/ferramentas.png",
+      "color": "#a8edea",
+      "active": true
+    }
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Ração Premium para Cães",
+      "category": "pets",
+      "link": "https://shopee.com.br/racao-caes",
+      "image": "assets/icons/pets.png",
+      "imageUrl": null,
+      "created_at": "2024-12-19T10:00:00Z",
+      "updated_at": "2024-12-19T10:00:00Z",
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Fones Bluetooth Wireless",
+      "category": "fones",
+      "link": "https://shopee.com.br/fones-bluetooth",
+      "image": "assets/icons/audio.png",
+      "imageUrl": null,
+      "created_at": "2024-12-19T10:00:00Z",
+      "updated_at": "2024-12-19T10:00:00Z",
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Smartphone Android",
+      "category": "eletronicos",
+      "link": "https://shopee.com.br/smartphone",
+      "image": "assets/icons/eletronicos.png",
+      "imageUrl": null,
+      "created_at": "2024-12-19T10:00:00Z",
+      "updated_at": "2024-12-19T10:00:00Z",
+      "active": true
+    },
+    {
+      "id": 4,
+      "name": "Boneco Labubu vinil",
+      "category": "eletronicos",
+      "link": "https://shopee.com.br/boneco-labubu",
+      "image": "assets/icons/eletronicos.png",
+      "imageUrl": "https://down-br.img.susercontent.com/file/br-11134207-7rndo-lhxqjqjqjqjqjq",
+      "created_at": "2024-12-19T10:00:00Z",
+      "updated_at": "2024-12-19T10:00:00Z",
+      "active": true
+    },
+    {
+      "id": 5,
+      "name": "Mouse Gamer RGB",
+      "category": "gamer",
+      "link": "https://shopee.com.br/mouse-gamer",
+      "image": "assets/icons/gamer.png",
+      "imageUrl": null,
+      "created_at": "2024-12-19T10:00:00Z",
+      "updated_at": "2024-12-19T10:00:00Z",
+      "active": true
+    },
+    {
+      "id": 6,
+      "name": "Kit de Panelas Antiaderente",
+      "category": "utensilios",
+      "link": "https://shopee.com.br/kit-panelas",
+      "image": "assets/icons/utensilios.png",
+      "imageUrl": null,
+      "created_at": "2024-12-19T10:00:00Z",
+      "updated_at": "2024-12-19T10:00:00Z",
+      "active": true
+    },
+    {
+      "id": 7,
+      "name": "Camiseta Básica",
+      "category": "roupas",
+      "link": "https://shopee.com.br/camiseta-basica",
+      "image": "assets/icons/roupas.png",
+      "imageUrl": null,
+      "created_at": "2024-12-19T10:00:00Z",
+      "updated_at": "2024-12-19T10:00:00Z",
+      "active": true
+    },
+    {
+      "id": 8,
+      "name": "Cabo USB-C",
+      "category": "cabos",
+      "link": "https://shopee.com.br/cabo-usb-c",
+      "image": "assets/icons/cabos.png",
+      "imageUrl": null,
+      "created_at": "2024-12-19T10:00:00Z",
+      "updated_at": "2024-12-19T10:00:00Z",
+      "active": true
+    },
+    {
+      "id": 9,
+      "name": "Furadeira Elétrica",
+      "category": "ferramentas",
+      "link": "https://shopee.com.br/furadeira-eletrica",
+      "image": "assets/icons/ferramentas.png",
+      "imageUrl": null,
+      "created_at": "2024-12-19T10:00:00Z",
+      "updated_at": "2024-12-19T10:00:00Z",
+      "active": true
+    }
+  ],
+  "settings": {
+    "theme": {
+      "primary_color": "#667eea",
+      "secondary_color": "#764ba2",
+      "background_gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      "text_color": "#2d3748",
+      "accent_color": "#ff6b35"
+    },
+    "display": {
+      "show_prices": false,
+      "show_descriptions": true,
+      "show_category_icons": true,
+      "products_per_page": 12,
+      "auto_refresh_interval": 5000
+    },
+    "admin": {
+      "session_timeout": 3600,
+      "max_products_per_category": 50,
+      "allow_image_uploads": true,
+      "backup_interval": 86400
+    }
+  },
+  "analytics": {
+    "total_products": 9,
+    "total_categories": 8,
+    "most_viewed_category": "eletronicos",
+    "last_backup": "2024-12-19T10:00:00Z",
+    "site_visits": 0
+  },
+  "backup": {
+    "last_backup_date": "2024-12-19T10:00:00Z",
+    "backup_frequency": "daily",
+    "backup_location": "./backups/",
+    "auto_backup": true
+  },
+  "auth": {
+    "admin_credentials": {
+      "username": "admin",
+      "password_hash": "70bffd93",
+      "salt": "compreibarato2024",
+      "created_at": "2024-12-19T10:00:00Z",
+      "last_login": null,
+      "active": true
+    },
+    "session_timeout": 3600,
+    "max_login_attempts": 5,
+    "lockout_duration": 900
+  }
+}

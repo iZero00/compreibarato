@@ -4,6 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Comprei Barato</title>
+    <script src="../database.js"></script>
+    <script>
+        // Verificar autenticação antes de carregar a página
+        (async function() {
+            try {
+                // Verificar se está logado
+                const isLoggedIn = sessionStorage.getItem('admin_logged_in') === 'true';
+                const sessionToken = sessionStorage.getItem('admin_session_token');
+                
+                if (!isLoggedIn || !sessionToken) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // Verificar se a sessão é válida
+                const isValidSession = await dbManager.validateSession(sessionToken);
+                if (!isValidSession) {
+                    // Sessão expirada
+                    sessionStorage.removeItem('admin_logged_in');
+                    sessionStorage.removeItem('admin_username');
+                    sessionStorage.removeItem('admin_session_token');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // Sessão válida, continuar carregando a página
+                console.log('Sessão válida, carregando painel admin...');
+            } catch (error) {
+                console.error('Erro ao verificar autenticação:', error);
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
     <style>
         * {
             margin: 0;
@@ -137,17 +170,18 @@
 
         .category-icons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
 
         .category-icon {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 90px;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 20px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
@@ -156,6 +190,7 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
+            gap: 8px;
         }
 
         .category-icon::before {
@@ -191,6 +226,18 @@
             object-fit: contain;
             border-radius: 50%;
             transition: all 0.3s ease;
+        }
+
+        .category-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #2d3748;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .category-icon.selected .category-name {
+            color: white;
         }
 
 
@@ -356,8 +403,8 @@
             }
             
             .category-icon {
-                width: 65px;
-                height: 65px;
+                width: 75px;
+                height: 85px;
             }
             
             .category-icon img {
@@ -431,8 +478,8 @@
             }
             
             .category-icon {
-                width: 60px;
-                height: 60px;
+                width: 70px;
+                height: 80px;
             }
             
             .category-icon img {
@@ -517,8 +564,8 @@
             }
             
             .category-icon {
-                width: 55px;
-                height: 55px;
+                width: 65px;
+                height: 75px;
             }
             
             .category-icon img {
@@ -575,27 +622,35 @@
                     <div class="category-icons">
                         <div class="category-icon" onclick="selectCategory('pets', 'Pets')" title="Pets">
                             <img src="../assets/icons/pets.png" alt="Pets">
+                            <span class="category-name">Pets</span>
                         </div>
                         <div class="category-icon" onclick="selectCategory('fones', 'Fones')" title="Fones">
                             <img src="../assets/icons/audio.png" alt="Fones">
+                            <span class="category-name">Fones</span>
                         </div>
                         <div class="category-icon selected" onclick="selectCategory('eletronicos', 'Eletrônicos')" title="Eletrônicos">
                             <img src="../assets/icons/eletronicos.png" alt="Eletrônicos">
+                            <span class="category-name">Eletrônicos</span>
                         </div>
                         <div class="category-icon" onclick="selectCategory('gamer', 'Gamer')" title="Gamer">
                             <img src="../assets/icons/gamer.png" alt="Gamer">
+                            <span class="category-name">Gamer</span>
                         </div>
                         <div class="category-icon" onclick="selectCategory('utensilios', 'Utensílios')" title="Utensílios">
                             <img src="../assets/icons/utensilios.png" alt="Utensílios">
+                            <span class="category-name">Utensílios</span>
                         </div>
                         <div class="category-icon" onclick="selectCategory('roupas', 'Roupas')" title="Roupas">
                             <img src="../assets/icons/roupas.png" alt="Roupas">
+                            <span class="category-name">Roupas</span>
                         </div>
                         <div class="category-icon" onclick="selectCategory('cabos', 'Cabos')" title="Cabos">
                             <img src="../assets/icons/cabos.png" alt="Cabos">
+                            <span class="category-name">Cabos</span>
                         </div>
                         <div class="category-icon" onclick="selectCategory('ferramentas', 'Ferramentas')" title="Ferramentas">
                             <img src="../assets/icons/ferramentas.png" alt="Ferramentas">
+                            <span class="category-name">Ferramentas</span>
                         </div>
                     </div>
                     <input type="hidden" id="productCategory" name="productCategory" value="eletronicos" required>
@@ -898,8 +953,15 @@
 
         // Função para fazer logout
         function logout() {
+            // Destruir sessão no banco de dados
+            dbManager.destroySession();
+            
+            // Limpar sessionStorage
             sessionStorage.removeItem('admin_logged_in');
             sessionStorage.removeItem('admin_username');
+            sessionStorage.removeItem('admin_session_token');
+            
+            // Redirecionar para login
             window.location.href = 'login.html';
         }
     </script>
