@@ -2,8 +2,8 @@
 
 ## 🔐 Credenciais Padrão
 
-**Usuário:** `Vinicius`  
-**Senha:** `Dio??157**`
+**Usuário:** `admin`  
+**Senha:** `admin`
 
 ## 📁 Arquivos do Sistema
 
@@ -41,8 +41,8 @@ http://localhost/admin/login.html
 ```
 
 ### 2. Fazer Login
-- Usuário: `Vinicius`
-- Senha: `Dio??157**`
+- Usuário: `admin`
+- Senha: `admin`
 
 ### 3. Gerenciar Produtos
 - Adicionar, editar e remover produtos
@@ -54,7 +54,7 @@ http://localhost/admin/login.html
 ### Alterar Senha
 ```javascript
 // No console do navegador
-await dbManager.changePassword('Dio??157**', 'nova_senha');
+await dbManager.changePassword('admin', 'nova_senha');
 ```
 
 ### Configurar Timeout de Sessão
@@ -73,8 +73,8 @@ Editar em `database.json`:
 {
   "auth": {
     "admin_credentials": {
-      "username": "Vinicius",
-      "password_hash": "1f8be3d9",
+      "username": "admin",
+      "password_hash": "70bffd93",
       "salt": "compreibarato2024",
       "created_at": "2024-12-19T10:00:00Z",
       "last_login": null,

@@ -108,7 +108,7 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 - **Validação**: Verificação de campos obrigatórios
 
 #### Sistema de Autenticação
-- **Credenciais**: Usuário `Vinicius`, Senha `Dio??157**`
+- **Credenciais**: Usuário `admin`, Senha `admin`
 - **Sessões**: Timeout de 1 hora de inatividade
 - **Proteção**: Bloqueio após 5 tentativas (15 minutos)
 - **Logs**: Registro de tentativas de login
@@ -126,8 +126,8 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
   "backup": { ... },
   "auth": {
     "admin_credentials": {
-      "username": "Vinicius",
-      "password_hash": "1f8be3d9",
+      "username": "admin",
+      "password_hash": "70bffd93",
       "salt": "compreibarato2024"
     }
   }
