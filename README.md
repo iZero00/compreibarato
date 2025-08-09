@@ -125,8 +125,9 @@ compreibarato-main/
 
 ### Alterar Senha
 ```javascript
-// No console do navegador
-await dbManager.changePassword('admin', 'nova_senha');
+// Função desabilitada por segurança
+// Para alterar a senha, edite diretamente o arquivo database.json
+// ou contate o administrador do sistema
 ```
 
 ### Configurar Timeout de Sessão

@@ -638,48 +638,56 @@ class DatabaseManager {
     }
 
     /**
-     * Altera a senha do admin
+     * Altera a senha do admin (DESABILITADO POR SEGURANÇA)
      */
     async changePassword(currentPassword, newPassword) {
-        if (!this.database) {
-            await this.loadDatabase();
-        }
-
-        const credentials = this.database.auth.admin_credentials;
-        
-        // Verifica senha atual
-        const currentHash = this.hashPassword(currentPassword, credentials.salt);
-        if (currentHash !== credentials.password_hash) {
-            return { success: false, message: 'Senha atual incorreta' };
-        }
-
-        // Gera nova senha
-        const newHash = this.hashPassword(newPassword, credentials.salt);
-        credentials.password_hash = newHash;
-        credentials.updated_at = new Date().toISOString();
-
-        await this.saveDatabase();
-        return { success: true, message: 'Senha alterada com sucesso' };
+        // Função desabilitada por segurança
+        console.warn('⚠️ Função changePassword foi desabilitada por segurança');
+        return { 
+            success: false, 
+            message: 'Alteração de senha desabilitada por segurança. Contate o administrador.' 
+        };
     }
 
     /**
-     * Obtém informações de autenticação
+     * Obtém informações de autenticação (PROTEGIDO)
      */
     async getAuthInfo() {
         if (!this.database) {
             await this.loadDatabase();
         }
-        return this.database.auth;
+        
+        // Retorna apenas informações não sensíveis
+        const authInfo = this.database.auth;
+        return {
+            session_timeout: authInfo.session_timeout,
+            max_login_attempts: authInfo.max_login_attempts,
+            lockout_duration: authInfo.lockout_duration,
+            // Não retorna credenciais sensíveis
+            has_credentials: !!authInfo.admin_credentials
+        };
     }
 }
 
 // Instância global do gerenciador de banco de dados
 const dbManager = new DatabaseManager();
 
+// Proteção contra manipulação via console
+Object.freeze(dbManager);
+Object.defineProperty(window, 'dbManager', {
+    value: dbManager,
+    writable: false,
+    configurable: false
+});
+
 // Exporta para uso em outros arquivos
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DatabaseManager;
 } else {
-    window.DatabaseManager = DatabaseManager;
-    window.dbManager = dbManager;
+    // Proteger a classe também
+    Object.defineProperty(window, 'DatabaseManager', {
+        value: DatabaseManager,
+        writable: false,
+        configurable: false
+    });
 }
