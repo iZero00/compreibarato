@@ -18,7 +18,40 @@ class AppSimples {
     // Carregar banco de dados
     async loadDatabase() {
         try {
-            // Tentar carregar do localStorage primeiro
+            // Detectar se estamos na Vercel ou localmente
+            const isVercel = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+            
+            if (isVercel) {
+                // Na Vercel, usar a API serverless
+                try {
+                    const response = await fetch('/api/db');
+                    if (response.ok) {
+                        this.db = await response.json();
+                        console.log('Banco carregado da API Vercel:', this.db);
+                        // Salvar no localStorage como backup
+                        localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Erro ao carregar da API Vercel, tentando localStorage...');
+                }
+            } else {
+                // Localmente, tentar carregar do db.json primeiro
+                try {
+                    const response = await fetch('./db.json');
+                    if (response.ok) {
+                        this.db = await response.json();
+                        console.log('Banco carregado do db.json local:', this.db);
+                        // Salvar no localStorage como backup
+                        localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
+                        return;
+                    }
+                } catch (e) {
+                    console.log('db.json local não encontrado, tentando localStorage...');
+                }
+            }
+            
+            // Se não conseguir carregar da API ou db.json, tentar localStorage
             const savedDB = localStorage.getItem('compreiBaratoDB');
             if (savedDB) {
                 this.db = JSON.parse(savedDB);
@@ -26,20 +59,8 @@ class AppSimples {
                 return;
             }
             
-            // Se não houver no localStorage, tentar carregar do db.json
-            try {
-                const response = await fetch('./db.json');
-                if (response.ok) {
-                    this.db = await response.json();
-                    console.log('Banco carregado do db.json:', this.db);
-                    this.saveDatabase(); // Salvar no localStorage
-                    return;
-                }
-            } catch (e) {
-                console.log('db.json não encontrado, criando banco padrão');
-            }
-            
-            // Criar banco padrão
+            // Se não houver dados, criar banco padrão
+            console.log('Criando banco padrão...');
             this.createDefaultDatabase();
         } catch (error) {
             console.error('Erro ao carregar banco:', error);
@@ -178,8 +199,54 @@ class AppSimples {
     // Salvar banco de dados
     async saveDatabase() {
         try {
+            // Salvar no localStorage primeiro
             localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
             console.log('Banco salvo no localStorage');
+            
+            // Detectar se estamos na Vercel ou localmente
+            const isVercel = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+            
+            if (isVercel) {
+                // Na Vercel, usar a API serverless
+                try {
+                    const response = await fetch('/api/db', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(this.db)
+                    });
+                    
+                    if (response.ok) {
+                        console.log('✅ Banco salvo na API Vercel - todos verão as mudanças!');
+                    } else {
+                        console.warn('Não foi possível salvar na API Vercel, mas os dados estão no localStorage');
+                    }
+                } catch (error) {
+                    console.warn('Erro ao salvar na API Vercel:', error);
+                    console.log('Dados salvos apenas no localStorage');
+                }
+            } else {
+                // Localmente, tentar salvar no db.json
+                try {
+                    const response = await fetch('./db.json', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(this.db, null, 2)
+                    });
+                    
+                    if (response.ok) {
+                        console.log('Banco salvo no db.json local');
+                    } else {
+                        console.warn('Não foi possível salvar no db.json local, mas os dados estão no localStorage');
+                    }
+                } catch (error) {
+                    console.warn('Erro ao salvar no db.json local:', error);
+                    console.log('Dados salvos apenas no localStorage');
+                }
+            }
         } catch (error) {
             console.error('Erro ao salvar banco:', error);
         }
