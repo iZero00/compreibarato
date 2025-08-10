@@ -1,0 +1,45 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin",
+      "created_at": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Fone Bluetooth Wireless",
+      "category": "fones",
+      "description": "Fone de ouvido bluetooth com cancelamento de ruído",
+      "price": "R$ 89,90",
+      "link": "https://shopee.com.br/fone-bluetooth",
+      "image": "assets/icons/audio.png",
+      "active": true,
+      "created_at": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Smartphone Android",
+      "category": "eletronicos",
+      "description": "Smartphone com câmera de 48MP e bateria de 5000mAh",
+      "price": "R$ 1.299,90",
+      "link": "https://shopee.com.br/smartphone",
+      "image": "assets/icons/eletronicos.png",
+      "active": true,
+      "created_at": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "categories": [
+    { "id": "fones", "name": "Fones", "icon": "assets/icons/audio.png" },
+    { "id": "eletronicos", "name": "Eletrônicos", "icon": "assets/icons/eletronicos.png" },
+    { "id": "ferramentas", "name": "Ferramentas", "icon": "assets/icons/ferramentas.png" },
+    { "id": "gamer", "name": "Gamer", "icon": "assets/icons/gamer.png" },
+    { "id": "pets", "name": "Pets", "icon": "assets/icons/pets.png" },
+    { "id": "roupas", "name": "Roupas", "icon": "assets/icons/roupas.png" },
+    { "id": "utensilios", "name": "Utensílios", "icon": "assets/icons/utensilios.png" },
+    { "id": "cabos", "name": "Cabos", "icon": "assets/icons/cabos.png" }
+  ]
+}
