@@ -448,47 +448,7 @@
             left: 100%;
         }
 
-        .btn-sync {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
-            color: white;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-        }
 
-        .btn-sync:hover {
-            background: linear-gradient(135deg, #138496 0%, #1ea085 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(23, 162, 184, 0.4);
-        }
-
-        .btn-sync:active {
-            transform: translateY(-1px);
-        }
-
-        .btn-sync::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-sync:hover::before {
-            left: 100%;
-        }
 
         .success-message {
             background: #d4edda;
@@ -646,7 +606,6 @@
                         <option value="cabos">Cabos</option>
                         <option value="ferramentas">Ferramentas</option>
                     </select>
-                    <button class="btn-sync" onclick="adminPanel.syncDatabase()">🔄 Sincronizar</button>
                 </div>
             </div>
             <div id="messageContainer"></div>
@@ -695,32 +654,48 @@
 
             async loadDatabase() {
                 try {
-                    // Primeiro, tentar carregar do arquivo db.json (sincronização)
-                    try {
-                        const response = await fetch('../db.json');
-                        if (response.ok) {
-                            this.db = await response.json();
-                            // Salvar no localStorage como backup
-                            localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
-                            console.log('Dados carregados do db.json (sincronizado)');
-                            return;
+                    // Detectar se estamos na Vercel ou localmente
+                    const isVercel = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+                    
+                    if (isVercel) {
+                        // Na Vercel, usar a API serverless
+                        try {
+                            const response = await fetch('/api/db');
+                            if (response.ok) {
+                                this.db = await response.json();
+                                console.log('Dados carregados da API Vercel');
+                                return;
+                            }
+                        } catch (e) {
+                            console.log('Erro ao carregar da API Vercel, tentando localStorage...');
                         }
-                    } catch (e) {
-                        console.log('db.json não encontrado, tentando localStorage...');
+                    } else {
+                        // Localmente, tentar carregar do db.json primeiro
+                        try {
+                            const response = await fetch('./db.json');
+                            if (response.ok) {
+                                this.db = await response.json();
+                                console.log('Dados carregados do db.json local');
+                                return;
+                            }
+                        } catch (e) {
+                            console.log('db.json local não encontrado, tentando localStorage...');
+                        }
                     }
                     
-                    // Se não conseguir carregar do arquivo, tentar localStorage
+                    // Se não conseguir carregar da API ou db.json, tentar localStorage
                     const savedDB = localStorage.getItem('compreiBaratoDB');
                     if (savedDB) {
                         this.db = JSON.parse(savedDB);
-                        console.log('Dados carregados do localStorage (backup)');
+                        console.log('Dados carregados do localStorage');
                         return;
                     }
                     
-                    // Se não há dados salvos, criar banco padrão
+                    // Se não houver dados, criar banco padrão
+                    console.log('Criando banco padrão...');
                     this.createDefaultDatabase();
                 } catch (error) {
-                    console.error('Erro ao carregar banco:', error);
+                    console.error('❌ Erro ao carregar banco:', error);
                     this.createDefaultDatabase();
                 }
             }
@@ -985,9 +960,54 @@
 
             async saveDatabase() {
                 try {
-                    // Salvar apenas no localStorage
+                    // Salvar no localStorage
                     localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
                     console.log('Banco salvo no localStorage');
+                    
+                    // Detectar se estamos na Vercel ou localmente
+                    const isVercel = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+                    
+                    if (isVercel) {
+                        // Na Vercel, usar a API serverless
+                        try {
+                            const response = await fetch('/api/db', {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(this.db)
+                            });
+                            
+                            if (response.ok) {
+                                console.log('✅ Banco salvo na API Vercel - todos verão as mudanças!');
+                            } else {
+                                console.warn('Não foi possível salvar na API Vercel, mas os dados estão no localStorage');
+                            }
+                        } catch (error) {
+                            console.warn('Erro ao salvar na API Vercel:', error);
+                            console.log('Dados salvos apenas no localStorage');
+                        }
+                    } else {
+                        // Localmente, tentar salvar no db.json
+                        try {
+                            const response = await fetch('./db.json', {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(this.db, null, 2)
+                            });
+                            
+                            if (response.ok) {
+                                console.log('Banco salvo no db.json local');
+                            } else {
+                                console.warn('Não foi possível salvar no db.json local, mas os dados estão no localStorage');
+                            }
+                        } catch (error) {
+                            console.warn('Erro ao salvar no db.json local:', error);
+                            console.log('Dados salvos apenas no localStorage');
+                        }
+                    }
                 } catch (error) {
                     console.error('Erro ao salvar banco:', error);
                 }
@@ -1009,22 +1029,7 @@
 
 
 
-            async syncDatabase() {
-                try {
-                    const response = await fetch('../db.json');
-                    if (response.ok) {
-                        this.db = await response.json();
-                        localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
-                        this.loadStats();
-                        this.loadProducts();
-                        this.showMessage('Dados sincronizados com sucesso!', 'success');
-                    } else {
-                        this.showMessage('Erro ao sincronizar dados', 'error');
-                    }
-                } catch (error) {
-                    this.showMessage('Erro ao sincronizar dados', 'error');
-                }
-            }
+
         }
 
         // Função global para logout
