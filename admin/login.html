@@ -91,6 +91,26 @@
             box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
         }
 
+        .btn-reset {
+            width: 100%;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+        }
+
         .error-message {
             color: #dc3545;
             margin-top: 10px;
@@ -125,6 +145,7 @@
             </div>
             <button type="submit" class="btn-login">Entrar</button>
             <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <button type="button" class="btn-reset" onclick="resetDatabase()">🔄 Resetar Banco</button>
         </form>
         <a href="../index.html" class="back-link">← Voltar ao site</a>
     </div>
@@ -154,24 +175,11 @@
                         return;
                     }
                     
-                    console.log('❌ Nenhum banco no localStorage, tentando db.json...');
+                    console.log('❌ Nenhum banco no localStorage, criando banco padrão...');
                     
-                    // Se não houver no localStorage, tentar carregar do db.json
-                    try {
-                        const response = await fetch('../db.json');
-                        if (response.ok) {
-                            this.db = await response.json();
-                            localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
-                            console.log('✅ Banco carregado do db.json:', this.db);
-                            return;
-                        }
-                    } catch (e) {
-                        console.log('❌ db.json não encontrado:', e);
-                    }
-                    
-                    console.log('🔄 Criando banco padrão...');
-                    // Criar banco padrão
+                    // Se não houver no localStorage, criar banco padrão imediatamente
                     this.createDefaultDatabase();
+                    
                 } catch (error) {
                     console.error('❌ Erro ao carregar banco:', error);
                     this.createDefaultDatabase();
@@ -249,10 +257,15 @@
                 console.log('Tentando login com:', username, password);
                 console.log('Banco atual:', this.db);
                 
-                if (!this.db || !this.db.users) {
-                    errorMessage.textContent = 'Erro: Banco de dados não carregado!';
-                    errorMessage.style.display = 'block';
-                    return;
+                // Garantir que o banco existe
+                if (!this.db) {
+                    console.log('🔄 Banco não encontrado, criando...');
+                    this.createDefaultDatabase();
+                }
+                
+                if (!this.db.users || this.db.users.length === 0) {
+                    console.log('🔄 Usuários não encontrados, criando admin padrão...');
+                    this.createDefaultDatabase();
                 }
                 
                 const user = this.db.users.find(u => 
@@ -278,6 +291,16 @@
                     errorMessage.textContent = 'Usuário ou senha incorretos!';
                     errorMessage.style.display = 'block';
                 }
+            }
+        }
+
+        // Função global para resetar o banco
+        function resetDatabase() {
+            if (confirm('Tem certeza que deseja resetar o banco de dados? Isso irá apagar todos os dados e criar um novo banco padrão.')) {
+                localStorage.removeItem('compreiBaratoDB');
+                localStorage.removeItem('adminSession');
+                alert('Banco resetado! Recarregue a página e use as credenciais padrão:\n\nUsuário: admin\nSenha: admin123');
+                location.reload();
             }
         }
 
