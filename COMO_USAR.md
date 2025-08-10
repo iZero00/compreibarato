@@ -41,28 +41,28 @@ Este sistema funciona **100% offline** mas com **sincronização automática** -
 - **Filtro por categoria**: Use o dropdown "Todas as categorias"
 
 ### 🔄 Sincronização
-- **🔄 Sincronizar**: Carrega dados atualizados do `db.json`
-- **📥 Baixar db.json**: Baixa o arquivo atualizado para compartilhar
+- **🔄 Sincronizar**: Combina dados locais com remotos (preserva seus produtos!)
 
 ## 💾 Sistema de Sincronização
 
 ### Como Funciona
-1. **Carregamento**: Sistema carrega dados do `db.json` primeiro
-2. **Backup local**: Salva no `localStorage` como backup
-3. **Sincronização**: Todos veem os mesmos produtos
+1. **Dados Locais**: Seus produtos ficam salvos no `localStorage` (nunca perdidos!)
+2. **Sincronização**: Combina produtos locais com remotos (não substitui!)
+3. **Preservação**: Todos os produtos que você adicionou são mantidos
 4. **Compartilhamento**: Arquivo `db.json` pode ser compartilhado
 
 ### Vantagens
-- ✅ **Todos veem os mesmos produtos**
+- ✅ **Seus produtos NUNCA são perdidos**
+- ✅ **Sincronização inteligente (combina, não substitui)**
 - ✅ **Sem servidor necessário**
 - ✅ **Funciona offline**
-- ✅ **Fácil de compartilhar**
+- ✅ **Backup automático no localStorage**
 
 ### Como Sincronizar
-1. **Adicionar/editar produtos** no painel admin
-2. **Clicar em "📥 Baixar db.json"**
-3. **Substituir o arquivo antigo** pelo novo
-4. **Outras pessoas clicam "🔄 Sincronizar"**
+1. **Adicionar/editar produtos** no painel admin (ficam salvos automaticamente)
+2. **Clicar em "🔄 Sincronizar"** para combinar com dados remotos
+3. **Seus produtos locais são preservados** (nunca perdidos!)
+4. **Novos produtos remotos são adicionados** (se houver)
 
 ## 🔧 Solução de Problemas
 
@@ -85,6 +85,7 @@ Este sistema funciona **100% offline** mas com **sincronização automática** -
 1. Se limpou o cache do navegador, os dados foram perdidos
 2. Clique em "🔄 Sincronizar" para recuperar do `db.json`
 3. Se não funcionar, recrie os produtos no painel admin
+4. **Dica**: Seus produtos ficam salvos no localStorage, então não são perdidos facilmente!
 
 ## 📁 Estrutura de Arquivos
 
@@ -104,16 +105,17 @@ compreibarato-main/
 ## 🔄 Fluxo de Sincronização
 
 ### Para Administradores:
-1. **Adicionar/editar produtos** no painel admin
-2. **Clicar "📥 Baixar db.json"** para baixar arquivo atualizado
-3. **Compartilhar o arquivo** via email, Google Drive, etc.
-4. **Substituir o arquivo antigo** pelo novo
+1. **Adicionar/editar produtos** no painel admin (salvos automaticamente no localStorage)
+2. **Clicar "🔄 Sincronizar"** para combinar com dados remotos
+3. **Seus produtos locais são preservados** (nunca perdidos!)
+4. **Novos produtos remotos são adicionados** (se houver)
 
 ### Para Usuários:
 1. **Abrir o site** (`index.html`)
-2. **Ver produtos automaticamente** (carregados do `db.json`)
+2. **Ver produtos automaticamente** (carregados do localStorage primeiro)
 3. **Se houver atualizações**, clicar "🔄 Sincronizar" no painel admin
+4. **Dados locais são sempre preservados**
 
 ## 🎯 Pronto para Usar!
 
-Agora você pode usar o sistema com sincronização! Todos veem os mesmos produtos, e você pode compartilhar atualizações facilmente através do arquivo `db.json`.
+Agora você pode usar o sistema com sincronização inteligente! **Seus produtos nunca são perdidos** e são sempre preservados no localStorage. O sistema combina dados locais com remotos, garantindo que você nunca perca o trabalho feito.
