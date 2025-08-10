@@ -144,12 +144,17 @@
 
             async loadDatabase() {
                 try {
+                    console.log('🔄 Carregando banco de dados...');
+                    
                     // Tentar carregar do localStorage primeiro
                     const savedDB = localStorage.getItem('compreiBaratoDB');
                     if (savedDB) {
                         this.db = JSON.parse(savedDB);
+                        console.log('✅ Banco carregado do localStorage:', this.db);
                         return;
                     }
+                    
+                    console.log('❌ Nenhum banco no localStorage, tentando db.json...');
                     
                     // Se não houver no localStorage, tentar carregar do db.json
                     try {
@@ -157,21 +162,25 @@
                         if (response.ok) {
                             this.db = await response.json();
                             localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
+                            console.log('✅ Banco carregado do db.json:', this.db);
                             return;
                         }
                     } catch (e) {
-                        console.log('db.json não encontrado');
+                        console.log('❌ db.json não encontrado:', e);
                     }
                     
+                    console.log('🔄 Criando banco padrão...');
                     // Criar banco padrão
                     this.createDefaultDatabase();
                 } catch (error) {
-                    console.error('Erro ao carregar banco:', error);
+                    console.error('❌ Erro ao carregar banco:', error);
                     this.createDefaultDatabase();
                 }
             }
 
             createDefaultDatabase() {
+                console.log('🔄 Criando banco padrão...');
+                
                 this.db = {
                     users: [
                         {
@@ -219,6 +228,7 @@
                 };
                 
                 localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
+                console.log('✅ Banco padrão criado e salvo:', this.db);
             }
 
             setupEventListeners() {
@@ -236,17 +246,31 @@
                 const password = document.getElementById('password').value;
                 const errorMessage = document.getElementById('errorMessage');
                 
+                console.log('Tentando login com:', username, password);
+                console.log('Banco atual:', this.db);
+                
+                if (!this.db || !this.db.users) {
+                    errorMessage.textContent = 'Erro: Banco de dados não carregado!';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                
                 const user = this.db.users.find(u => 
                     u.username === username && u.password === password
                 );
                 
+                console.log('Usuário encontrado:', user);
+                
                 if (user && user.role === 'admin') {
                     // Salvar sessão do admin
-                    localStorage.setItem('adminSession', JSON.stringify({
+                    const sessionData = {
                         user: user,
                         loggedIn: true,
                         timestamp: new Date().toISOString()
-                    }));
+                    };
+                    
+                    localStorage.setItem('adminSession', JSON.stringify(sessionData));
+                    console.log('Sessão salva:', sessionData);
                     
                     // Redirecionar para o painel
                     window.location.href = 'admin.html';
