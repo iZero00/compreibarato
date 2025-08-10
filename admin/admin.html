@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Comprei Barato</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2d3748;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info span {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .btn-home {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-home:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #dc3545;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 15px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .products-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .products-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-box input {
+            padding: 10px 16px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .product-category {
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #dc3545;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-sync, .btn-download {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-sync {
+            background: #17a2b8;
+        }
+
+        .btn-sync:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+
+        .btn-download {
+            background: #6f42c1;
+        }
+
+        .btn-download:hover {
+            background: #5a32a3;
+            transform: translateY(-2px);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .products-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>⚙️ Painel Administrativo</h1>
+        <div class="user-info">
+            <span>Logado como: <span id="userName">Admin</span></span>
+            <button class="btn-home" onclick="goToHome()">🏠 Site Principal</button>
+            <button class="btn-logout" onclick="logout()">Sair</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard">
+            <div class="card">
+                <h2>📊 Estatísticas</h2>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalProducts">0</div>
+                        <div class="stat-label">Produtos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalCategories">0</div>
+                        <div class="stat-label">Categorias</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="activeProducts">0</div>
+                        <div class="stat-label">Ativos</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>➕ Adicionar Produto</h2>
+                <form id="addProductForm">
+                    <div class="form-group">
+                        <label for="name">Nome do Produto:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Categoria:</label>
+                        <select id="category" name="category" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="fones">Fones</option>
+                            <option value="eletronicos">Eletrônicos</option>
+                            <option value="gamer">Gamer</option>
+                            <option value="pets">Pets</option>
+                            <option value="utensilios">Utensílios</option>
+                            <option value="roupas">Roupas</option>
+                            <option value="cabos">Cabos</option>
+                            <option value="ferramentas">Ferramentas</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="link">Link da Shopee:</label>
+                        <input type="url" id="link" name="link" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">URL da Imagem:</label>
+                        <input type="url" id="image" name="image" placeholder="https://exemplo.com/imagem.jpg">
+                    </div>
+                    <button type="submit" class="btn-primary">Adicionar Produto</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="products-section">
+            <div class="products-header">
+                <h2>📦 Produtos</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar produtos...">
+                    <select id="categoryFilter">
+                        <option value="">Todas as categorias</option>
+                        <option value="fones">Fones</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="gamer">Gamer</option>
+                        <option value="pets">Pets</option>
+                        <option value="utensilios">Utensílios</option>
+                        <option value="roupas">Roupas</option>
+                        <option value="cabos">Cabos</option>
+                        <option value="ferramentas">Ferramentas</option>
+                    </select>
+                    <button class="btn-sync" onclick="adminPanel.syncDatabase()">🔄 Sincronizar</button>
+                    <button class="btn-download" onclick="adminPanel.downloadUpdatedDatabase()">📥 Baixar db.json</button>
+                </div>
+            </div>
+            <div id="messageContainer"></div>
+            <div class="products-grid" id="productsGrid">
+                <!-- Produtos serão carregados aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AdminPanel {
+            constructor() {
+                this.db = null;
+                this.currentUser = null;
+                this.init();
+            }
+
+            async init() {
+                this.checkAuth();
+                await this.loadDatabase();
+                this.setupEventListeners();
+                this.loadStats();
+                this.loadProducts();
+            }
+
+            checkAuth() {
+                const session = localStorage.getItem('adminSession');
+                if (!session) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                try {
+                    const sessionData = JSON.parse(session);
+                    if (!sessionData.loggedIn || !sessionData.user) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+
+                    this.currentUser = sessionData.user;
+                    document.getElementById('userName').textContent = this.currentUser.username;
+                } catch (error) {
+                    window.location.href = 'login.html';
+                }
+            }
+
+            async loadDatabase() {
+                try {
+                    // Primeiro, tentar carregar do arquivo db.json (sincronização)
+                    try {
+                        const response = await fetch('../db.json');
+                        if (response.ok) {
+                            this.db = await response.json();
+                            // Salvar no localStorage como backup
+                            localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
+                            console.log('Dados carregados do db.json (sincronizado)');
+                            return;
+                        }
+                    } catch (e) {
+                        console.log('db.json não encontrado, tentando localStorage...');
+                    }
+                    
+                    // Se não conseguir carregar do arquivo, tentar localStorage
+                    const savedDB = localStorage.getItem('compreiBaratoDB');
+                    if (savedDB) {
+                        this.db = JSON.parse(savedDB);
+                        console.log('Dados carregados do localStorage (backup)');
+                        return;
+                    }
+                    
+                    // Se não há dados salvos, criar banco padrão
+                    this.createDefaultDatabase();
+                } catch (error) {
+                    console.error('Erro ao carregar banco:', error);
+                    this.createDefaultDatabase();
+                }
+            }
+
+            createDefaultDatabase() {
+                this.db = {
+                    users: [
+                        {
+                            id: 1,
+                            username: "admin",
+                            password: "admin123",
+                            role: "admin",
+                            created_at: new Date().toISOString()
+                        }
+                    ],
+                    products: [
+                        {
+                            id: 1,
+                            name: "Fone Bluetooth Wireless",
+                            category: "fones",
+                            description: "Fone de ouvido bluetooth com cancelamento de ruído",
+                            price: "R$ 89,90",
+                            link: "https://shopee.com.br/fone-bluetooth",
+                            image: "../assets/icons/audio.png",
+                            active: true,
+                            created_at: new Date().toISOString()
+                        },
+                        {
+                            id: 2,
+                            name: "Smartphone Android",
+                            category: "eletronicos",
+                            description: "Smartphone com câmera de 48MP e bateria de 5000mAh",
+                            price: "R$ 1.299,90",
+                            link: "https://shopee.com.br/smartphone",
+                            image: "../assets/icons/eletronicos.png",
+                            active: true,
+                            created_at: new Date().toISOString()
+                        }
+                    ],
+                    categories: [
+                        { id: "fones", name: "Fones", icon: "../assets/icons/audio.png" },
+                        { id: "eletronicos", name: "Eletrônicos", icon: "../assets/icons/eletronicos.png" },
+                        { id: "ferramentas", name: "Ferramentas", icon: "../assets/icons/ferramentas.png" },
+                        { id: "gamer", name: "Gamer", icon: "../assets/icons/gamer.png" },
+                        { id: "pets", name: "Pets", icon: "../assets/icons/pets.png" },
+                        { id: "roupas", name: "Roupas", icon: "../assets/icons/roupas.png" },
+                        { id: "utensilios", name: "Utensílios", icon: "../assets/icons/utensilios.png" },
+                        { id: "cabos", name: "Cabos", icon: "../assets/icons/cabos.png" }
+                    ]
+                };
+                
+                localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
+            }
+
+            setupEventListeners() {
+                const addProductForm = document.getElementById('addProductForm');
+                if (addProductForm) {
+                    addProductForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.handleAddProduct();
+                    });
+                }
+
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        this.handleSearch(e.target.value);
+                    });
+                }
+
+                const categoryFilter = document.getElementById('categoryFilter');
+                if (categoryFilter) {
+                    categoryFilter.addEventListener('change', (e) => {
+                        this.handleCategoryFilter(e.target.value);
+                    });
+                }
+            }
+
+            loadStats() {
+                const totalProducts = this.db.products.filter(p => p.active !== false).length;
+                const totalCategories = this.db.categories.length;
+                const activeProducts = this.db.products.filter(p => p.active !== false).length;
+
+                document.getElementById('totalProducts').textContent = totalProducts;
+                document.getElementById('totalCategories').textContent = totalCategories;
+                document.getElementById('activeProducts').textContent = activeProducts;
+            }
+
+            loadProducts(filter = '') {
+                const productsGrid = document.getElementById('productsGrid');
+                let products = this.db.products.filter(p => p.active !== false); // Mostrar apenas produtos ativos
+
+                if (filter) {
+                    products = products.filter(product => 
+                        product.name.toLowerCase().includes(filter.toLowerCase()) ||
+                        product.description.toLowerCase().includes(filter.toLowerCase()) ||
+                        product.category.toLowerCase().includes(filter.toLowerCase())
+                    );
+                }
+
+                if (products.length === 0) {
+                    productsGrid.innerHTML = '<p>Nenhum produto encontrado.</p>';
+                    return;
+                }
+
+                productsGrid.innerHTML = products.map(product => `
+                    <div class="product-card" data-id="${product.id}">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='../assets/icons/eletronicos.png'">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-actions">
+                            <button class="btn-edit" onclick="adminPanel.editProduct(${product.id})">Editar</button>
+                            <button class="btn-delete" onclick="adminPanel.deleteProduct(${product.id})">Deletar</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            handleAddProduct() {
+                const formData = new FormData(document.getElementById('addProductForm'));
+                const productData = {
+                    name: formData.get('name'),
+                    category: formData.get('category'),
+                    description: '',
+                    price: '',
+                    link: formData.get('link'),
+                    image: formData.get('image') || '../assets/icons/eletronicos.png'
+                };
+
+                this.addProduct(productData);
+            }
+
+            async addProduct(productData) {
+                const newProduct = {
+                    id: this.getNextId('products'),
+                    ...productData,
+                    active: true,
+                    created_at: new Date().toISOString()
+                };
+                
+                this.db.products.push(newProduct);
+                await this.saveDatabase();
+                
+                this.showMessage('Produto adicionado com sucesso!', 'success');
+                this.loadStats();
+                this.loadProducts();
+                document.getElementById('addProductForm').reset();
+            }
+
+            async deleteProduct(id) {
+                if (confirm('Tem certeza que deseja deletar este produto?')) {
+                    const index = this.db.products.findIndex(p => p.id === id);
+                    if (index !== -1) {
+                        // Remover completamente o produto do array
+                        this.db.products.splice(index, 1);
+                        await this.saveDatabase();
+                        
+                        this.showMessage('Produto deletado com sucesso!', 'success');
+                        this.loadStats();
+                        this.loadProducts();
+                    }
+                }
+            }
+
+            editProduct(id) {
+                const product = this.db.products.find(p => p.id === id);
+                if (product) {
+                    // Preencher o formulário com os dados do produto
+                    document.getElementById('name').value = product.name;
+                    document.getElementById('category').value = product.category;
+                    document.getElementById('link').value = product.link;
+                    document.getElementById('image').value = product.image;
+
+                    // Mudar o botão para "Atualizar"
+                    const submitBtn = document.querySelector('#addProductForm button[type="submit"]');
+                    submitBtn.textContent = 'Atualizar Produto';
+                    submitBtn.onclick = (e) => {
+                        e.preventDefault();
+                        this.updateProduct(id);
+                    };
+                }
+            }
+
+            async updateProduct(id) {
+                const formData = new FormData(document.getElementById('addProductForm'));
+                const productData = {
+                    name: formData.get('name'),
+                    category: formData.get('category'),
+                    description: '',
+                    price: '',
+                    link: formData.get('link'),
+                    image: formData.get('image') || '../assets/icons/eletronicos.png'
+                };
+
+                const index = this.db.products.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    this.db.products[index] = {
+                        ...this.db.products[index],
+                        ...productData,
+                        updated_at: new Date().toISOString()
+                    };
+                    await this.saveDatabase();
+                    
+                    this.showMessage('Produto atualizado com sucesso!', 'success');
+                    this.loadProducts();
+                    
+                    // Resetar formulário
+                    document.getElementById('addProductForm').reset();
+                    const submitBtn = document.querySelector('#addProductForm button[type="submit"]');
+                    submitBtn.textContent = 'Adicionar Produto';
+                    submitBtn.onclick = null;
+                }
+            }
+
+            handleSearch(query) {
+                this.loadProducts(query);
+            }
+
+            handleCategoryFilter(category) {
+                if (!category) {
+                    this.loadProducts();
+                    return;
+                }
+                
+                const products = this.db.products.filter(p => p.category === category && p.active !== false);
+                const productsGrid = document.getElementById('productsGrid');
+                
+                if (products.length === 0) {
+                    productsGrid.innerHTML = '<p>Nenhum produto encontrado nesta categoria.</p>';
+                    return;
+                }
+
+                productsGrid.innerHTML = products.map(product => `
+                    <div class="product-card" data-id="${product.id}">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='../assets/icons/eletronicos.png'">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-actions">
+                            <button class="btn-edit" onclick="adminPanel.editProduct(${product.id})">Editar</button>
+                            <button class="btn-delete" onclick="adminPanel.deleteProduct(${product.id})">Deletar</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            getNextId(type) {
+                const items = this.db[type] || [];
+                return items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1;
+            }
+
+            async saveDatabase() {
+                try {
+                    // Salvar no localStorage (backup local)
+                    localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
+                    console.log('Banco salvo no localStorage');
+                    
+                    // Tentar salvar no arquivo db.json para sincronização
+                    try {
+                        // Como não temos servidor, vamos criar um download do arquivo atualizado
+                        this.downloadUpdatedDatabase();
+                    } catch (error) {
+                        console.warn('Não foi possível salvar no db.json:', error);
+                    }
+                } catch (error) {
+                    console.error('Erro ao salvar banco:', error);
+                }
+            }
+
+            showMessage(message, type) {
+                const messageContainer = document.getElementById('messageContainer');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
+                messageDiv.textContent = message;
+                
+                messageContainer.innerHTML = '';
+                messageContainer.appendChild(messageDiv);
+                
+                setTimeout(() => {
+                    messageDiv.remove();
+                }, 3000);
+            }
+
+            downloadUpdatedDatabase() {
+                const dataStr = JSON.stringify(this.db, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'db.json';
+                link.click();
+                URL.revokeObjectURL(url);
+                
+                this.showMessage('Arquivo db.json baixado! Substitua o arquivo antigo para sincronizar.', 'success');
+            }
+
+            async syncDatabase() {
+                try {
+                    const response = await fetch('../db.json');
+                    if (response.ok) {
+                        this.db = await response.json();
+                        localStorage.setItem('compreiBaratoDB', JSON.stringify(this.db));
+                        this.loadStats();
+                        this.loadProducts();
+                        this.showMessage('Dados sincronizados com sucesso!', 'success');
+                    } else {
+                        this.showMessage('Erro ao sincronizar dados', 'error');
+                    }
+                } catch (error) {
+                    this.showMessage('Erro ao sincronizar dados', 'error');
+                }
+            }
+        }
+
+        // Função global para logout
+        function logout() {
+            localStorage.removeItem('adminSession');
+            window.location.href = 'login.html';
+        }
+
+        // Função global para ir ao site principal
+        function goToHome() {
+            window.location.href = '../index.html';
+        }
+
+        // Inicializar painel quando a página carregar
+        let adminPanel;
+        document.addEventListener('DOMContentLoaded', () => {
+            adminPanel = new AdminPanel();
+        });
+    </script>
+</body>
+</html>
