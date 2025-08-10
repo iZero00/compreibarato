@@ -470,17 +470,17 @@
             }
             
             .category-title img {
-                width: 70px;
-                height: 70px;
+                width: 50px;
+                height: 50px;
             }
             
             .products-grid {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 20px;
             }
             
             .product-card {
-                padding: 20px;
+                padding: 25px;
             }
             
             .product-name {
@@ -488,14 +488,7 @@
             }
             
             .product-image {
-                width: 100%;
                 height: 180px;
-                object-fit: cover;
-                border-radius: 15px;
-                margin-bottom: 15px;
-                display: block;
-                max-width: 100%;
-                min-height: 150px;
             }
         }
 
@@ -701,20 +694,8 @@
         // Carregar produtos do banco de dados
         async function loadProducts() {
             try {
-                const allProducts = await dbManager.getAllProducts();
-                console.log('Produtos carregados:', allProducts);
-                products = allProducts;
-                
-                // Verificar se há produtos
-                if (products.length === 0) {
-                    console.log('Nenhum produto encontrado no banco de dados');
-                    // Adicionar alguns produtos de exemplo se não houver nenhum
-                    await addSampleProducts();
-                    const newProducts = await dbManager.getAllProducts();
-                    console.log('Produtos de exemplo adicionados:', newProducts);
-                    products = newProducts;
-                }
-                
+                const dbProducts = await dbManager.getAllProducts();
+                products = dbProducts;
                 showAllProducts();
             } catch (error) {
                 console.error('Erro ao carregar produtos:', error);
@@ -765,14 +746,8 @@
                         const productCard = document.createElement('div');
                         productCard.className = 'product-card';
                         
-                        // Verificar se há imagem
-                        let imageHtml = '';
-                        if (product.image) {
-                            console.log('Produto com imagem:', product.name, product.image);
-                            imageHtml = `<img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="product-image" loading="lazy" onerror="this.src='assets/icons/pets.png'; this.style.display='block';">`;
-                        } else {
-                            console.log('Produto sem imagem:', product.name);
-                        }
+                        const productImage = product.imageUrl || product.image;
+                        const imageHtml = productImage ? `<img src="${escapeHtml(productImage)}" alt="${escapeHtml(product.name)}" class="product-image" loading="lazy" onerror="this.src='assets/icons/${escapeHtml(product.category)}.png'">` : '';
                         
                         productCard.innerHTML = `
                             ${imageHtml}
@@ -790,58 +765,13 @@
             });
         }
 
-        // Mostrar produtos de uma categoria específica
-        function showCategory(category) {
-            currentCategory = category;
-            const container = document.getElementById('productsContainer');
-            container.innerHTML = '';
-
-            const categoryProducts = products.filter(product => product.category === category);
-            const categoryInfo = getCategoryInfo(category);
-
-            if (categoryProducts.length === 0) {
-                container.innerHTML = `
-                    <div class="category-title">
-                        <img src="${escapeHtml(categoryInfo.icon)}" alt="${escapeHtml(categoryInfo.name)}">
-                        <div>
-                            <h2>${escapeHtml(categoryInfo.name)}</h2>
-                            <p>Nenhum produto encontrado nesta categoria.</p>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            const categoryTitle = document.createElement('div');
-            categoryTitle.className = 'category-title';
-            categoryTitle.innerHTML = `
-                <img src="${escapeHtml(categoryInfo.icon)}" alt="${escapeHtml(categoryInfo.name)}">
-                <div>
-                    <h2>${escapeHtml(categoryInfo.name)}</h2>
-                    <p>${escapeHtml(categoryInfo.description)}</p>
-                </div>
-            `;
-
-            const productsGrid = document.createElement('div');
-            productsGrid.className = 'products-grid';
-
-            categoryProducts.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                
-                // Verificar se há imagem
-                let imageHtml = '';
-                if (product.image) {
-                    imageHtml = `<img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="product-image" loading="lazy" onerror="this.src='assets/icons/pets.png'; this.style.display='block';">`;
+        function groupProductsByCategory() {
+            const grouped = {};
+            products.forEach(product => {
+                if (!grouped[product.category]) {
+                    grouped[product.category] = [];
                 }
-                
-                productCard.innerHTML = `
-                    ${imageHtml}
-                    <h3 class="product-name">${escapeHtml(product.name)}</h3>
-                    <a href="${escapeHtml(product.link)}" class="product-link" target="_blank" rel="noopener noreferrer">Ver Oferta</a>
-                `;
-                
-                productsGrid.appendChild(productCard);
+                grouped[product.category].push(product);
             });
 
             container.appendChild(categoryTitle);
